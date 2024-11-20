@@ -7,8 +7,10 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
   
     static associate(models) {
+      User.hasMany(models.ArtPiece, {
+        foreignKey: 'userId'
+      })
       // User.hasMany (user_favorite) fk: userId
-      // User.hasMany (art_piece) fk: userId
       // User.hasMany (user_bid) fk: userId
       // User.hasMany (comment) fk: userId
       // User.hasMany (collection) fk: userId
