@@ -37,13 +37,11 @@ router.post(
     validateSignup,
     async (req, res) => {
       const { email, password, username } = req.body;
-
-      const hashedPassword = bcrypt.hashSync(password);
       
       const errors = {};  
-
+      
       const existingUser = await User.findOne({ where: { username } });
-
+      
       if (existingUser) {
         errors.username = 'Username must be unique';
       }
@@ -52,11 +50,12 @@ router.post(
       if (existingEmail) {
         errors.email = 'Email is already in use';
       }
-
+      
       if (Object.keys(errors).length > 0) {
         return res.status(500).json({ message: 'Bad Request', errors });
       }
-
+      
+      const hashedPassword = bcrypt.hashSync(password);
       const user = await User.create({ email, username, hashedPassword });
   
       const safeUser = {
