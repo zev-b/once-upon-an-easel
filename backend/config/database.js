@@ -6,7 +6,7 @@ const schema = db.schema;
 
 module.exports = {
     development: {
-        storage: config.dbFile,
+        storage: config.dbFile, // or process.env.DB_FILE? (does this exist?)
         dialect: "sqlite",
         seederStorage: "sequelize",
         logQueryParameters: true,
