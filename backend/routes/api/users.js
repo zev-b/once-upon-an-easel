@@ -57,12 +57,10 @@ router.post(
         return res.status(500).json({ message: 'Bad Request', errors });
       }
 
-      const user = await User.create({ firstName, lastName, email, username, hashedPassword });
+      const user = await User.create({ email, username, hashedPassword });
   
       const safeUser = {
         id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
         email: user.email,
         username: user.username,
       };
