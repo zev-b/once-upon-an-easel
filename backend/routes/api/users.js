@@ -36,7 +36,8 @@ router.post(
     '/',
     validateSignup,
     async (req, res) => {
-      const { firstName, lastName, email, password, username } = req.body;
+      const { email, password, username } = req.body;
+
       const hashedPassword = bcrypt.hashSync(password);
       
       const errors = {};  
@@ -73,5 +74,21 @@ router.post(
       });
     }
 );
+
+
+// Restore session user
+router.get('/', (req, res) => {
+  const { user } = req;
+  if (user) {
+      const safeUser = {
+          id: user.id,
+          email: user.email,
+          username: user.username,
+      };
+      return res.json({
+          user: safeUser
+      });
+  } else return res.json({ user: null });
+});
 
 module.exports = router;
