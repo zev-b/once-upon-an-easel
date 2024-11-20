@@ -1,4 +1,4 @@
-Frontend:
+# __Frontend:__
 
 1. build out the splash page
 
@@ -200,7 +200,7 @@ export const updateUserThunk = (userId, form) => async (dispatch) => {
 
 ```
 
-Backend:
+# __Backend:__
 
 1. Install: aws-sdk and multer
 ```sh
@@ -311,12 +311,12 @@ module.exports = {
 
 ```
 
-3. complete AWS set up online
-    - get AWS user API key and use it in .env
-    - make a bucket and use the name in .env
-    - get AWS user secret key and add it to .env
+### 3. complete AWS set up online
+   - get AWS user API key and use it in .env
+   - make a bucket and use the name in .env
+   - get AWS user secret key and add it to .env
 
-4. Make route using aws middleware:
+# 4. Make route using aws middleware:
 
 
 ```js
@@ -349,13 +349,13 @@ router.put('/:id/update', singleMulterUpload('image'), async (req, res, next) =>
 
 ```
 
-note: notice we have to pass in a string of what the name of our file in formData is, and then pass it into aws middleware to parse for us. Then we can use `singlePublicFileUpload` to upload 1 image to aws
+## __note: notice we have to pass in a string of what the name of our file in formData is, and then pass it into aws middleware to parse for us. Then we can use `singlePublicFileUpload` to upload 1 image to aws__
 
 
-Frontend (again)
+# Frontend (again)
 
-1. Complete Action type
-2. Make a reducer
+## 1. Complete Action type
+## 2. Make a reducer
 
 
 Enjoy 😄
