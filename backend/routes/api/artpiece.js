@@ -10,34 +10,38 @@ const router = express.Router();
 
 router.get('/', async (req, res, next) => {
     try {
-        const { page = 1, size = 10, tags } = req.query;
+        const { page = 1, size = 20, tagIds } = req.query;
 
-    // Pagination
+   
     const limit = parseInt(size);
     const offset = (parseInt(page) - 1) * limit;
 
-    // Filter by tags (case-insensitive)
+    
     let where = {};
-    if (tags) {
-      const tagsArray = Array.isArray(tags) ? tags : [tags];
+    if (tagIds) {
+      const tagIdArray = Array.isArray(tagIds) ? tagIds.map(Number) : [Number(tagIds)];
       where = {
-        name: {
-          [Op.iLike]: { [Op.any]: tagsArray.map((tag) => `%${tag}%`) },
+        id: {
+          [Op.in]: tagIdArray,
         },
       };
     }
 
-    // Query database
+   
     const artPieces = await ArtPiece.findAndCountAll({
       limit,
       offset,
-      distinct: true,
       include: [
         {
-          model: Tag,
-          where,
-          required: !!tags, // Include only if tags filter is applied
-          attributes: ["name"],
+            model: Tag,
+            where,
+            required: !!tagIds, //! converts the array to a bool, excludes where clause, if not filtering by tags
+            attributes: ["id", "name"],
+            through: { attributes: [] },
+        },
+        {
+            model: User, 
+            attributes: ["firstName", "lastName"],
         },
       ],
     });
@@ -50,13 +54,20 @@ router.get('/', async (req, res, next) => {
       artPieces: artPieces.rows.map((artPiece) => ({
         id: artPiece.id,
         userId: artPiece.userId,
+        user: {
+            firstName: artPiece.User.firstName,
+            lastName: artPiece.User.lastName,
+        },
         imageId: artPiece.imageId,
         title: artPiece.title,
         description: artPiece.description,
         available: artPiece.available,
         createdAt: artPiece.createdAt,
         updatedAt: artPiece.updatedAt,
-        tags: artPiece.Tags.map((tag) => tag.name),
+        tags: artPiece.Tags.map((tag) => ({
+            id: tag.id,
+            name: tag.name
+        })),
       })),
     };
 
