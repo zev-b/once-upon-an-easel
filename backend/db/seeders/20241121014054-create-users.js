@@ -1,6 +1,6 @@
 'use strict';
 
-const { User } = require('../models');
+const User = require('../models/user');
 const bcrypt = require("bcryptjs");
 
 let options = {};
@@ -11,84 +11,75 @@ if (process.env.NODE_ENV === 'production') {
 //^ --------------- Seeder Data ---------------
 const seedData = [
   {
-    firstName: "Marc",
-    lastName: "Depot",
+    firstName: "Demo",
+    lastName: "User",
     email: 'demo@user.io',
-    username: 'Demo-lition',
-    hashedPassword: bcrypt.hashSync('demolizer')
+    username: 'demo-user',
+    hashedPassword: bcrypt.hashSync('password')
   },
   {
-    firstName: "Marked",
-    lastName: "Depotted",
+    firstName: "Larry",
+    lastName: "Dell",
     email: 'user1@user.io',
-    username: 'LarryTest',
+    username: 'larry-dell',
     hashedPassword: bcrypt.hashSync('hilarrious')
   },
   {
-    firstName: "Marque",
-    lastName: "Depotte",
+    firstName: "Zavier",
+    lastName: "Suave",
     email: 'user2@user.io',
-    username: 'FrankTest',
+    username: 'zavier-suave',
     hashedPassword: bcrypt.hashSync('frankly')
   },
   {
     firstName: "Bruce",
     lastName: "Wayne",
-    email: 'vengeance@batcave.io',
-    username: 'dark-knight',
+    email: 'user3@user.io',
+    username: 'bruce-wayne',
     hashedPassword: bcrypt.hashSync('clownsarestupid')
   },
   {
     firstName: "Leonardo",
     lastName: "DaVinci",
-    email: 'ninja1@turtles.io',
+    email: 'user4@user.io',
     username: 'turtledavinci',
     hashedPassword: bcrypt.hashSync('wisdom')
   },
   {
     firstName: "Michelangelo",
-    lastName: "NotaTurtle",
-    email: 'ninja2@turtles.io',
-    username: 'turtleBuonarroti',
+    lastName: "Denton",
+    email: 'user5@user.io',
+    username: 'notaturtle',
     hashedPassword: bcrypt.hashSync('jokester')
   },
   {
     firstName: "Donatello",
-    lastName: "Turtle",
-    email: 'ninja3@turtles.io',
+    lastName: "Rice",
+    email: 'user6@user.io',
     username: 'thebrains',
     hashedPassword: bcrypt.hashSync('brainiac')
   },
   {
     firstName: "Raphael",
-    lastName: "Bruiser",
-    email: 'ninja4@turtles.io',
+    lastName: "Kent",
+    email: 'user7@user.io',
     username: 'dont-try-me',
     hashedPassword: bcrypt.hashSync('toughguy')
   }
-]
+];
+
 //^ -------------------------------------------- 
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    /**
-     * Add seed commands here.
-     *
-     * Example:
-     * await queryInterface.bulkInsert('People', [{
-     *   name: 'John Doe',
-     *   isBetaMember: false
-     * }], {});
-    */
+    await User.bulkCreate(seedData, { validate: true });
   },
 
   async down (queryInterface, Sequelize) {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
+    options.tableName = 'Users';
+    for (const user of seedData) {
+      await User.destroy({ where: user });
+    }  
   }
 };
