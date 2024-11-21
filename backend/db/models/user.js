@@ -39,11 +39,11 @@ module.exports = (sequelize, DataTypes) => {
         isEmail: true,
       }
     },
-    hashed_password: {
+    hashedPassword: {
       type: DataTypes.STRING.BINARY,
       allowNull: false,
       validate: {
-        len: [72, 72]
+        len: [72, 72] // bcrypt hashed passwords are 72 characters
       }
     }
   }, {
@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'User',
     defaultScope: {
       attributes: {
-        exclude: ['hashed_password'],
+        exclude: ['hashedPassword'],
       }
     }
   });
