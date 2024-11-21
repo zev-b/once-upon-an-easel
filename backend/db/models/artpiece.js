@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    imgId: {
+    imageId: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -41,13 +41,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        max: 50
+        len: [1, 50]
       }
     },
     description: {
       type: DataTypes.STRING,
       validate: {
-        max: 315
+        len: [0, 315],
       },
     },
     available: DataTypes.BOOLEAN,

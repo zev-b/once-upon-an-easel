@@ -19,6 +19,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(24),
       allowNull: false,
       unique: true,
+      validate: {
+        len: [1, 24],
+      },
     },
   }, {
     sequelize,
