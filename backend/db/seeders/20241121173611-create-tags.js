@@ -9,33 +9,15 @@ if (process.env.NODE_ENV === 'production') {
 
 //^ --------------- Seeder Data ---------------
 const seedData = [
-  {
-    name: 'Jerusalem-Urban'
-  },
-  {
-    name: 'Portrait'
-  },
-  {
-    name: 'Landscape'
-  },
-  {
-    name: 'Concept'
-  },
-  {
-    name: 'Still-Life'
-  },
-  {
-    name: 'Sketch'
-  },
-  {
-    name: 'Tradition'
-  },
-  {
-    name: 'Watercolor'
-  },
-  {
-    name: 'Inspiration'
-  },
+  { name: 'Jerusalem-Urban' },
+  { name: 'Portrait' },
+  { name: 'Landscape' },
+  { name: 'Concept' },
+  { name: 'Still-Life' },
+  { name: 'Sketch' },
+  { name: 'Tradition' },
+  { name: 'Watercolor' },
+  { name: 'Inspiration' },
 ]
 
 /** @type {import('sequelize-cli').Migration} */
