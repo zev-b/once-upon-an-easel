@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       });
       
       ArtPiece.belongsToMany(models.Tag, {
-        through: models.ArtTags,
+        through: 'ArtTags',
         foreignKey: 'artId',
         otherKey: 'tagId',
       });

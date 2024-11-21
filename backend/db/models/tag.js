@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // Many-to-Many relationship with ArtPiece via ArtTag
       Tag.belongsToMany(models.ArtPiece, {
-        through: models.ArtTag,
+        through: 'ArtTag',
         foreignKey: 'tagId',
         otherKey: 'artId',
       });
