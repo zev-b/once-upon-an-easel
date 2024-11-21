@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING.BINARY,
       allowNull: false,
       validate: {
-        len: [72, 72] // bcrypt hashed passwords are 72 characters
+        len: [60, 60] // bcrypt hashed passwords are 72 characters
       }
     }
   }, {
