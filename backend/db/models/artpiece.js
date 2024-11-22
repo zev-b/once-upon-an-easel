@@ -50,7 +50,10 @@ module.exports = (sequelize, DataTypes) => {
         len: [0, 315],
       },
     },
-    available: DataTypes.BOOLEAN,
+    available: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
   }, {
     sequelize,
     modelName: 'ArtPiece',

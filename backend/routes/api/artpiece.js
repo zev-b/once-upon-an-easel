@@ -1,11 +1,12 @@
 const express = require('express');
 const { setTokenCookie, requireAuth, restoreUser } = require('../../utils/auth');
-const { check } = require('express-validator');
+const { check, validationResult } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { Op } = require("sequelize");
 
 const { User, ArtPiece, Tag, ArtTag } = require('../../db/models'); 
 const router = express.Router();
+
 
 
 
@@ -60,7 +61,7 @@ router.get('/', async (req, res, next) => {
                 },
             ],
         });
-
+        
         // response
         const result = {
             page: page || 1,
@@ -108,7 +109,7 @@ router.get('/current',restoreUser, requireAuth, async (req, res, next) => {
                 },
             ],
         });
-
+        
         const result = userArt.map((art) => ({
             id: art.id,
             userId: art.userId,
@@ -170,13 +171,39 @@ router.get('/:artId',restoreUser, requireAuth, async (req, res, next) => {
                 name: tag.name,
             })),
         };
-
+        
         res.status(200).json({ art: result });
     } catch (error) {
         next(error);
     }
 });
 
+
+//# express-validator for artPiece
+const validateArtPiece = [
+    check('title')
+        .exists({ checkFalsy: true })
+        .withMessage('Title is required.')
+        .isLength({ max: 50 })
+        .withMessage('Title cannot exceed 50 characters.'),
+    check('description')
+        .optional()
+        .isLength({ min: 0, max: 315 })
+        .withMessage('Description cannot exceed 315 characters.'),
+    check('imageId')
+        .exists({ checkFalsy: true })
+        .withMessage('An image is required.')
+        .isString()
+        .withMessage('Image ID must be a valid string.'),
+    check('tags')
+        .isArray()
+        .optional()
+        .withMessage('Tags must be an array of strings.')
+        .custom((tags) => tags.every(tag => typeof tag === 'string'))
+        .withMessage('Each tag must be a string.')
+];
+
+//# POST art img-upload with S3
 router.post('/', restoreUser, requireAuth, async (req, res, next) => {
 
 });
