@@ -130,6 +130,57 @@ router.get('/current',restoreUser, requireAuth, async (req, res, next) => {
     }
 });
 
+//# GET art by artId
+router.get('/:artId',restoreUser, requireAuth, async (req, res, next) => {
+    try {
+        const artById = await ArtPiece.findOne({
+            where: { id: req.params.artId },
+            include: [
+                {
+                    model: Tag,
+                    attributes: ["id", "name"],
+                    through: { attributes: [] },
+                },
+                {
+                    model: User, 
+                    attributes: ["firstName", "lastName"],
+                },
+            ],
+        });
+
+        if (!artById) {
+            return res.status(404).json({ message: "Art couldn't be found" })
+        }
+
+        const result = {
+            id: artById.id,
+            userId: artById.userId,
+            user: {
+                firstName: artById.User.firstName,
+                lastName: artById.User.lastName,
+            },
+            imageId: artById.imageId,
+            title: artById.title,
+            description: artById.description,
+            available: artById.available,
+            createdAt: artById.createdAt,
+            updatedAt: artById.updatedAt,
+            tags: artById.Tags.map((tag) => ({
+                id: tag.id,
+                name: tag.name,
+            })),
+        };
+
+        res.status(200).json({ art: result });
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.post('/', restoreUser, requireAuth, async (req, res, next) => {
+
+});
+
 
 module.exports = router;
 
