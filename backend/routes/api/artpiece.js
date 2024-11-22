@@ -1,5 +1,5 @@
 const express = require('express');
-const { setTokenCookie, requireAuth } = require('../../utils/auth');
+const { setTokenCookie, requireAuth, restoreUser } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { Op } = require("sequelize");
@@ -9,7 +9,7 @@ const router = express.Router();
 
 
 
-//#  
+//#  GET all art-pieces with pagination and optional filtering by tag
 router.get('/', async (req, res, next) => {
     try {
         const queryErrors = {};
@@ -66,20 +66,20 @@ router.get('/', async (req, res, next) => {
             page: page || 1,
             size: limit,
             total: artPieces.count,
-            artPieces: artPieces.rows.map((artPiece) => ({
-                id: artPiece.id,
-                userId: artPiece.userId,
+            artPieces: artPieces.rows.map((art) => ({
+                id: art.id,
+                userId: art.userId,
                 user: {
-                    firstName: artPiece.User.firstName,
-                    lastName: artPiece.User.lastName,
+                    firstName: art.User.firstName,
+                    lastName: art.User.lastName,
                 },
-                imageId: artPiece.imageId,
-                title: artPiece.title,
-                description: artPiece.description,
-                available: artPiece.available,
-                createdAt: artPiece.createdAt,
-                updatedAt: artPiece.updatedAt,
-                tags: artPiece.Tags.map((tag) => ({
+                imageId: art.imageId,
+                title: art.title,
+                description: art.description,
+                available: art.available,
+                createdAt: art.createdAt,
+                updatedAt: art.updatedAt,
+                tags: art.Tags.map((tag) => ({
                     id: tag.id,
                     name: tag.name
                 })),
@@ -90,7 +90,45 @@ router.get('/', async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-})
+});
+
+
+//# GET current user's art-pieces
+router.get('/current',restoreUser, requireAuth, async (req, res, next) => {
+    const currentUserId = req.user.id;
+
+    try {
+        const userArt = await ArtPiece.findAll({
+            where: { userId: currentUserId },
+            include: [
+                {
+                    model: Tag,
+                    attributes: ["id", "name"],
+                    through: { attributes: [] },
+                },
+            ],
+        });
+
+        const result = userArt.map((art) => ({
+            id: art.id,
+            userId: art.userId,
+            imageId: art.imageId,
+            title: art.title,
+            description: art.description,
+            available: art.available,
+            createdAt: art.createdAt,
+            updatedAt: art.updatedAt,
+            tags: art.Tags.map((tag) => ({
+                id: tag.id,
+                name: tag.name,
+            })),
+        }));
+
+        res.status(200).json({ artPieces: result });
+    } catch (error) {
+        next(error);
+    }
+});
 
 
 module.exports = router;
