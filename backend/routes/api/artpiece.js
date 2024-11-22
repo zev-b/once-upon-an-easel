@@ -8,6 +8,8 @@ const { User, ArtPiece, Tag, ArtTag } = require('../../db/models');
 const router = express.Router();
 
 
+
+//#  
 router.get('/', async (req, res, next) => {
     try {
         const queryErrors = {};
@@ -18,7 +20,7 @@ router.get('/', async (req, res, next) => {
         if (page < 1) {
             queryErrors.page = 'Page must be greater than or equal to 1';
         }
-        
+
         if (size < 1 || size > 20) {
             queryErrors.size = 'Size must be between 1 and 20';
         }
