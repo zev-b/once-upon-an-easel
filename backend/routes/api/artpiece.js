@@ -34,6 +34,9 @@ router.get('/', async (req, res, next) => {
         const limit = size || 20;
         const offset = ((page || 1) - 1) * limit;
         
+
+        //! TODO: Add filtering options by artist first and last name
+        //! keep in mind searching with typo in *part* of name...
         let where = {};
         if (req.query.tagIds) {
             const tagIdArray = Array.isArray(req.query.tagIds) ? req.query.tagIds.map(Number) : [Number(req.query.tagIds)];
