@@ -208,15 +208,15 @@ const validateArtPiece = [
 ];
 
 //# POST art img-upload with S3
-router.post('/', singleMulterUpload('image'), validateArtPiece, restoreUser, requireAuth, async (req, res, next) => {
+router.post('/', singleMulterUpload('image'), /*validateArtPiece,*/ restoreUser, requireAuth, async (req, res, next) => {
 
-    const { title, description, tags = [] } = req.body;
+    // const { title, description, tags = [] } = req.body;
     const userId = req.user.id;
 
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
+    // const errors = validationResult(req);
+    // if (!errors.isEmpty()) {
+    //     return res.status(400).json({ errors: errors.array() });
+    // }
 
     let imageUrl;
 
@@ -226,29 +226,28 @@ router.post('/', singleMulterUpload('image'), validateArtPiece, restoreUser, req
        }
 
     //^ Deal with ArtPiece here   
-       const newArt = await ArtPiece.create({
-        userId,
-        title,
-        description,
-        imageId: imageUrl,
-       })
+    //    const newArt = await ArtPiece.create({
+    //     userId,
+    //     title,
+    //     description,
+    //     imageId: imageUrl,
+    //    });
 
     //^ Deal with Tags here:  
-    // for each tag in the array...
-    // format ea tag: lowercase, trim, replace spaces with hyphens
-    const reqTags = await Promise.all(
-        tags.map(async tagName => {
-            const [tag] = await Tag.findOrCreate({
-                where: { name: tagName.toLowerCase() }, // case
-                defaults: { name: tagName.toLowerCase() }, // Additional fields can go here
-            });
-            return tag;
-        })
-    );
-
-
-
-       res.status(201).json(newArt);
+    //+ for each tag in the array...
+    //+ format ea tag: lowercase, trim, replace spaces with hyphens
+    // const reqTags = await Promise.all(
+    //     tags.map(async tagName => {
+    //         const [tag] = await Tag.findOrCreate({
+    //             where: { name: tagName.toLowerCase() }, // case
+    //             defaults: { name: tagName.toLowerCase() }, // Additional fields can go here
+    //         });
+    //         return tag;
+    //     })
+    // );
+        console.log("\n ===Img Url==== \n", imageUrl);
+        res.status(201)
+    //    res.status(201).json(/*newArt*/ {imageUrl});
     } catch (error) {
         next(error)
     }
