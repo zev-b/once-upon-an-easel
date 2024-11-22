@@ -5,6 +5,7 @@ const { handleValidationErrors } = require('../../utils/validation');
 const { Op } = require("sequelize");
 
 const { User, ArtPiece, Tag, ArtTag } = require('../../db/models'); 
+const { singleMulterUpload, singlePublicFileUpload } = require('../../utils/awsS3');
 const router = express.Router();
 
 
@@ -196,15 +197,58 @@ const validateArtPiece = [
         .isString()
         .withMessage('Image ID must be a valid string.'),
     check('tags')
-        .isArray()
         .optional()
+        .isArray()
         .withMessage('Tags must be an array of strings.')
         .custom((tags) => tags.every(tag => typeof tag === 'string'))
         .withMessage('Each tag must be a string.')
 ];
 
 //# POST art img-upload with S3
-router.post('/', restoreUser, requireAuth, async (req, res, next) => {
+router.post('/', singleMulterUpload('image'), validateArtPiece, restoreUser, requireAuth, async (req, res, next) => {
+
+    const { title, description, tags = [] } = req.body;
+    const userId = req.user.id;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    let imageUrl;
+
+    try {
+       if (req.file) {
+           imageUrl = await singlePublicFileUpload(req.file);
+       }
+
+    //^ Deal with ArtPiece here   
+       const newArt = await ArtPiece.create({
+        userId,
+        title,
+        description,
+        imageId: imageUrl,
+       })
+
+    //^ Deal with Tags here:  
+    // for each tag in the array...
+    // format ea tag: lowercase, trim, replace spaces with hyphens
+    const reqTags = await Promise.all(
+        tags.map(async tagName => {
+            const [tag] = await Tag.findOrCreate({
+                where: { name: tagName.toLowerCase() }, // case
+                defaults: { name: tagName.toLowerCase() }, // Additional fields can go here
+            });
+            return tag;
+        })
+    );
+
+
+
+       res.status(201).json(newArt);
+    } catch (error) {
+        next(error)
+    }
 
 });
 
