@@ -55,7 +55,7 @@ router.get('/', async (req, res, next) => {
                 {
                     model: Tag,
                     where,
-                    required: !!req.query.tagIds, //! converts the array to a bool, excludes where clause, if not filtering by tags
+                    required: !!req.query.tagIds, //! converts the array to a boolean. Excludes "where"-clause, if not filtering by tags
                     attributes: ["id", "name"],
                     through: { attributes: [] },
                 },
