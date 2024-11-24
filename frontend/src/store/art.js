@@ -29,27 +29,16 @@ const createArt = (artPiece) => ({
 
 //# GET all art 
 export const fetchArtThunk = () => async (dispatch) => {
-  const res = await csrfFetch('api/art-pieces');
+  const res = await fetch('api/art-pieces');
   if (res.ok) {
     const data = await res.json();
 
     console.log('\n=== data ===\n', data);
 
-    dispatch(loadArt(data.art)); // .Art|.artPieces ?
-    return data.art;
+    dispatch(loadArt(data)); // Splash only uses .artPieces, Gallery needs all info
+    return data.artPieces;
   } else {
     console.error('Failed to fetch art');
-  }
-}
-
-//# GET art by id (art-details) 
-export const fetchArtDetails = (artId) => async (dispatch) => {
-  const response = await fetch(`/api/art-pieces/${artId}`);
-  if (response.ok) {
-      const artPiece = await response.json();
-      dispatch(loadArtDetails(artPiece));
-  } else {
-      console.error(`Failed to get details for artId: ${artId}`);
   }
 }
 
@@ -58,9 +47,20 @@ export const fetchUserArtThunk = () => async (dispatch) => {
   const response = await csrfFetch('/api/art-pieces/current');
   if (response.ok) {
       const data = await response.json();
-      dispatch(loadUserArt(data.art)) // |.Art|.artPieces ?
+      dispatch(loadUserArt(data.artPieces)) // |.Art|.artPieces ?
   }
 };
+
+//# GET art by id (art-details) 
+export const fetchArtDetails = (artId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/art-pieces/${artId}`);
+  if (response.ok) {
+      const artPiece = await response.json();
+      dispatch(loadArtDetails(artPiece));
+  } else {
+      console.error(`Failed to get details for artId: ${artId}`);
+  }
+}
 
 //# POST
 export const createArtThunk = (formData) => async (dispatch) => {

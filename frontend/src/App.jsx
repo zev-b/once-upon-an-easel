@@ -4,15 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createBrowserRouter, RouterProvider, Outlet, useNavigate } from 'react-router-dom';
 // import Navigation from './components/Navigation/Navigation';
 import * as sessionActions from './store/session';
-// import TestUpload from './components/TestUpload/TestUpload';
-// import LoginSplashPage from './components/WelcomePage/WelcomePage';
 import WelcomePage from './components/WelcomePage/WelcomePage';
-
-// import SpotsList from './components/SpotsList/SpotsList';
-// import * as spotsListActions from './store/spots'; 
-// import SpotDetails from './components/SpotDetails/SpotDetails';
-// import CreateSpotPage from './components/CreateSpotPage/CreateSpotPage';
-// import ManageSpots from './components/ManageSpots/ManageSpots';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -36,18 +28,14 @@ function Layout() {
 
 const router = createBrowserRouter([
   {
-    element: (
-      <>
-        <Layout />
-      </>
-    ),
+    element: <Layout />,
     path: "/",
     children: [
       {
         index: true,
         element: <WelcomePage />,
       },
-    ]
+    ],
   },
 ]);
 

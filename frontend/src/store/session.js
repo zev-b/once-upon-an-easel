@@ -2,7 +2,6 @@ import { csrfFetch } from "./csrf";
 
 const LOGIN_USER = 'session/loginUser';
 const LOGOUT_USER = 'session/logoutUser';
-
 /**
  * A User object from the backend DB
  * @typedef { Object } User
@@ -12,7 +11,6 @@ const LOGOUT_USER = 'session/logoutUser';
  * @property { firstName } string
  * @property { lastName } string
  */
-
 /**
  * 
  * @typedef { Object } UserWithPassProperties 
