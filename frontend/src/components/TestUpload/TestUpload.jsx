@@ -1,10 +1,11 @@
 // frontend/src/components/TestUpload.jsx
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { uploadArtImage } from '../../store/upload';
 
 export default function TestUpload() {
   const dispatch = useDispatch();
+
   const [file, setFile] = useState(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
