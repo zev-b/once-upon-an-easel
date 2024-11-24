@@ -1,7 +1,7 @@
 // frontend/src/components/TestUpload.jsx
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { uploadArtImage } from '../../store/art';
+import { createArtThunk } from '../../store/art';
 
 export default function TestUpload() {
   const dispatch = useDispatch();
@@ -26,7 +26,7 @@ export default function TestUpload() {
     formData.append('description', description);
 
     try {
-      await dispatch(uploadArtImage(formData));
+      await dispatch(createArtThunk(formData));
       alert('Upload successful!');
       setFile(null);
       setTitle('');

@@ -47,7 +47,7 @@ export const fetchArtDetails = (artId) => async (dispatch) => {
   const response = await fetch(`/api/art-pieces/${artId}`);
   if (response.ok) {
       const artPiece = await response.json();
-      dispatch(loadSpotDetails(artPiece));
+      dispatch(loadArtDetails(artPiece));
   } else {
       console.error(`Failed to get details for artId: ${artId}`);
   }
@@ -58,7 +58,7 @@ export const fetchUserArtThunk = () => async (dispatch) => {
   const response = await csrfFetch('/api/art-pieces/current');
   if (response.ok) {
       const data = await response.json();
-      dispatch(loadUserSpots(data.art)) // |.Art|.artPieces ?
+      dispatch(loadUserArt(data.art)) // |.Art|.artPieces ?
   }
 };
 
@@ -86,6 +86,11 @@ const initialState = {
 
 export const artReducer = (state = initialState, action) => {
   switch (action.type) {
+    case LOAD_ART:
+    case LOAD_USER_ART:
+      return { ...state, allArt: { ...state.allArt, ...action.art } };
+    case LOAD_ART_DETAILS: 
+      return { ...state, artDetails: action.art };
     case CREATE_ART:
       return { ...state, [action.artPiece.id]: action.artPiece };
     default:
