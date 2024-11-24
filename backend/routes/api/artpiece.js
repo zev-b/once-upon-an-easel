@@ -210,7 +210,7 @@ const validateArtPiece = [
 //# POST art img-upload with S3
 router.post('/', singleMulterUpload('image'), /*validateArtPiece,*/ restoreUser, requireAuth, async (req, res, next) => {
 
-    // const { title, description, tags = [] } = req.body;
+    const { title, description } = req.body;
     const userId = req.user.id;
 
     // const errors = validationResult(req);
@@ -226,12 +226,12 @@ router.post('/', singleMulterUpload('image'), /*validateArtPiece,*/ restoreUser,
        }
 
     //^ Deal with ArtPiece here   
-    //    const newArt = await ArtPiece.create({
-    //     userId,
-    //     title,
-    //     description,
-    //     imageId: imageUrl,
-    //    });
+       const newArt = await ArtPiece.create({
+        userId,
+        title,
+        description,
+        imageId: imageUrl,
+       });
 
     //^ Deal with Tags here:  
     //+ for each tag in the array...
@@ -246,8 +246,8 @@ router.post('/', singleMulterUpload('image'), /*validateArtPiece,*/ restoreUser,
     //     })
     // );
         console.log("\n ===Img Url==== \n", imageUrl);
-        res.status(201)
-    //    res.status(201).json(/*newArt*/ {imageUrl});
+        // res.status(201)
+       res.status(201).json(newArt /*{imageUrl}*/);
     } catch (error) {
         next(error)
     }
