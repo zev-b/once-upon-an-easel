@@ -1,8 +1,10 @@
 // frontend/src/components/Navigation/ProfileButton.jsx
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as sessionActions from '../../store/session';
+import { PiUserListLight } from "react-icons/pi";
+import OpenModalMenuItem from "./OpenModalItem";
 
 export default function ProfileButton({ user }) {
     const dispatch = useDispatch();
@@ -39,7 +41,20 @@ export default function ProfileButton({ user }) {
 
     return (
         <>
-        <h4>Profile button stuff</h4>
-        </>
-    )
+        <button onClick={toggleMenu}>
+        <PiUserListLight />
+        </button>
+        <ul className={ulClassName} ref={ulRef}>
+            <>
+              <li>Hello, {user.username}</li>
+              <li>
+                <button onClick={() => navigate('/art-pieces/manage-spots')}>My Art</button>
+              </li>
+              <li>
+                <button onClick={logout}>Log Out</button>
+              </li>
+            </>
+        </ul>
+      </>
+    );
 }

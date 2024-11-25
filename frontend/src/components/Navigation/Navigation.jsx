@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import ProfileButton from "./ProfileButton";
 import "./Navigation.css";
 
-export default function Navigation({ isLoaded }) {
+export default function Navigation() {
     const sessionUser = useSelector(state => state.session.user);
 
     return (
@@ -14,7 +14,7 @@ export default function Navigation({ isLoaded }) {
                 <img src="" alt="return to gallery home button" />
                 </NavLink>
             </li>
-            {isLoaded && (
+            {sessionUser && (
                 <li>
                     {/* {!!sessionUser && ( Button to open post-art-modal here )} */}
                     <ProfileButton user={sessionUser} />
