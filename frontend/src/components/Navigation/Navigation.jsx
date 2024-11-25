@@ -10,8 +10,8 @@ export default function Navigation() {
     return (
         <ul>
             <li>
-                <NavLink to="/artpieces" >
-                <img src="" alt="return to gallery home button" />
+                <NavLink to="/art-pieces" >
+                <img src="" alt="return-to-gallery-home button" />
                 </NavLink>
             </li>
             {sessionUser && (
