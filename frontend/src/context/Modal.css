@@ -15,12 +15,12 @@
     right: 0;
     left: 0;
     bottom: 0;
-    background-color: rgba(207, 194, 181, 0.463);
+    background-color: rgba(72, 71, 69, 0.575);
   }
   
   #modal-content {
     position: absolute;
-    background-color: white;
+    /* background-color: white; */
     max-height: 90vh;
     overflow-y: auto; /*added*/
   }

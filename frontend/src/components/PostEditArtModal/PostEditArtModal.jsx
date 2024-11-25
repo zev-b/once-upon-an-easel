@@ -1,8 +1,8 @@
 // frontend/src/components/PostEditArtModal/PostEditArtModal.jsx
-
 import { useDispatch, useSelector } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { useState } from "react";
+import { createArtThunk } from "../../store/art";
 
 export default function PostEditArtModal() {
     const user = useSelector(state => state.session.user);
@@ -38,7 +38,7 @@ export default function PostEditArtModal() {
         setErrors({});
         const img_url = imgUrl;
         const form = {img_url};
-        const postOrEdit = await dispatch(postEditArtThunk(user.id, form))
+        const postOrEdit = await dispatch(createArtThunk(user.id, form))
           .then(closeModal)
           .catch(async (res) => {
             const data = await res.json();
@@ -47,14 +47,29 @@ export default function PostEditArtModal() {
             }
         });
     };
-
+    
     return (
         <div>
         <h1>Post/Edit art Modal</h1>
         <form onSubmit={handleSubmit}>
           <div>
+              <input 
+                  type="text"
+                  value={title}
+                  placeholder="Title"
+                  onChange={(e) => setTitle(e.target.value)}
+                  required 
+              />
+               {errors.title && (<p>{errors.title}</p>)}
+              <input 
+                  type="text"
+                  value={description}
+                  placeholder="Description(optional)"
+                  onChange={(e) => setDescription(e.target.value)}
+              />
+               {errors.description && (<p>{errors.description}</p>)}
             {showUpload && (
-              <label htmlFor='file-upload'> Select From Computer
+                <label htmlFor='file-upload'> Select From Computer
                 <input
                   type='file'
                   id='file-upload'
@@ -70,23 +85,12 @@ export default function PostEditArtModal() {
                   src={previewUrl}
                   alt="preview"
                 />
-                <button>Submit</button>
+               {errors.imgUrl && (<p>{errors.imgUrl}</p>)}
+                <button
+                    type="submit"
+                >Submit</button>
               </div>
             )}
-            <input 
-                type="text"
-                value={title}
-                placeholder="Title"
-                onChange={(e) => setTitle(e.target.value)}
-                required 
-            />
-            <input 
-                type="text"
-                value={description}
-                placeholder="Description(optional)"
-                onChange={(e) => setDescription(e.target.value)}
-                required 
-            />
           </div>
         </form>
     </div>
