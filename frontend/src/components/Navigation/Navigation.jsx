@@ -8,15 +8,14 @@ export default function Navigation() {
     const sessionUser = useSelector(state => state.session.user);
 
     return (
-        <ul>
-            <li>
+        <ul className="navbar">
+            <li className="home-button">
                 <NavLink to="/art-pieces" >
                 <img src="" alt="return-to-gallery-home button" />
                 </NavLink>
             </li>
             {sessionUser && (
-                <li>
-                    {/* {!!sessionUser && ( Button to open post-art-modal here )} */}
+                <li className="navbar-item">
                     <ProfileButton user={sessionUser} />
                 </li>
             )}
