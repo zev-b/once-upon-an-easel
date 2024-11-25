@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import * as sessionActions from '../../store/session';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginSignupForm() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
 
   const [credential, setCredential] = useState("");
@@ -25,7 +27,7 @@ export default function LoginSignupForm() {
         if (data && data.errors) {
           setErrors(data.errors);
         }
-      });
+      }).then(() => navigate("/art-pieces"));
   };
 
   const handleSignup = (e) => {
@@ -40,13 +42,12 @@ export default function LoginSignupForm() {
           lastName,
           password
         })
-      )
-        .catch(async (res) => {
+      ).catch(async (res) => {
           const data = await res.json();
           if (data?.errors) {
             setErrors(data.errors);
           }
-        });
+        }).then(() => navigate("/art-pieces"));
     }
     return setErrors({
       confirmPassword: "Confirm Password field must be the same as the Password field"
@@ -71,7 +72,7 @@ export default function LoginSignupForm() {
         if (data && data.errors) {
           setErrors(data.errors);
         }
-      });
+      }).then(() => navigate("/art-pieces"));
   };
 
   const toggleForm = () => {

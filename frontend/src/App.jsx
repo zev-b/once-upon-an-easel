@@ -35,6 +35,15 @@ const router = createBrowserRouter([
         index: true,
         element: <WelcomePage />,
       },
+      {
+        path: "/art-pieces",
+        element: (
+          <>
+          <Navigation />
+          <GalleryHome />
+          </>
+        )
+      }
     ],
   },
 ]);
