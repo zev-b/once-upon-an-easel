@@ -35,17 +35,29 @@ router.get('/', async (req, res, next) => {
         const offset = ((page || 1) - 1) * limit;
         
 
-        //! TODO: Add filtering options by artist first and last name
-        //! keep in mind searching with typo in *part* of name...
-        let where = {};
+        let whereTags = {};
         if (req.query.tagIds) {
             const tagIdArray = Array.isArray(req.query.tagIds) ? req.query.tagIds.map(Number) : [Number(req.query.tagIds)];
             where = {
                 id: {
-                [Op.in]: tagIdArray,
+                    [Op.in]: tagIdArray,
                 },
             };
         }
+        //! TODO: Add filtering options by artist first and last name
+        //! keep in mind searching with typo in *part* of name...
+        let whereUser = {};
+        if (req.query.artistName) {
+            const artistName = req.query.artistName.toLowerCase();
+            whereUser = {
+                [Op.or]: [
+                    { firstName: { [Op.iLike]: `%${artistName}%` } },
+                    { lastName: { [Op.iLike]: `%${artistName}%` } },
+                ]
+            }
+        }
+        //! Change "iLike" operator 
+
     
         const artPieces = await ArtPiece.findAndCountAll({
             limit,
@@ -54,7 +66,7 @@ router.get('/', async (req, res, next) => {
             include: [
                 {
                     model: Tag,
-                    where,
+                    where: whereTags,
                     required: !!req.query.tagIds, //! converts the array to a boolean. Excludes "where"-clause, if not filtering by tags
                     attributes: ["id", "name"],
                     through: { attributes: [] },
@@ -62,6 +74,7 @@ router.get('/', async (req, res, next) => {
                 {
                     model: User, 
                     attributes: ["firstName", "lastName"],
+                    where: whereUser,
                 },
             ],
         });
