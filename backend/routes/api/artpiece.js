@@ -4,7 +4,7 @@ const { check, validationResult } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { Op } = require("sequelize");
 
-const { User, ArtPiece, Tag, ArtTag } = require('../../db/models'); 
+const { User, ArtPiece, Tag, ArtTag, Sequelize } = require('../../db/models'); 
 const { singleMulterUpload, singlePublicFileUpload } = require('../../utils/awsS3');
 const router = express.Router();
 
@@ -51,13 +51,19 @@ router.get('/', async (req, res, next) => {
             const artistName = req.query.artistName.toLowerCase();
             whereUser = {
                 [Op.or]: [
-                    { firstName: { [Op.iLike]: `%${artistName}%` } },
-                    { lastName: { [Op.iLike]: `%${artistName}%` } },
+                    Sequelize.where(
+                        Sequelize.fn('LOWER', Sequelize.col('firstName')),
+                        'LIKE',
+                        `%${artistName.toLowerCase()}%`
+                    ),
+                    Sequelize.where(
+                        Sequelize.fn('LOWER', Sequelize.col('lastName')),
+                        'LIKE',
+                        `%${artistName.toLowerCase()}%`
+                    ),
                 ]
             }
         }
-        //! Change "iLike" operator 
-
     
         const artPieces = await ArtPiece.findAndCountAll({
             limit,
