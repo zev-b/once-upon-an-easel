@@ -30,8 +30,6 @@ export const logoutUser = () => {
         type: LOGOUT_USER,
     }
 };
-
-
 /**
  * Send a request to the login endpoint on the backend
  * @param {{ credential: string, password: string }} userLogin The username/email and password for the user
