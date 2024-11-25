@@ -6,6 +6,7 @@ import * as sessionActions from '../../store/session';
 import { PiUserListLight } from "react-icons/pi";
 import OpenModalMenuItem from "./OpenModalItem";
 import './ProfileButton.css';
+import PostEditArtModal from "../PostEditArtModal/PostEditArtModal";
 
 export default function ProfileButton({ user }) {
     const dispatch = useDispatch();
@@ -50,6 +51,11 @@ export default function ProfileButton({ user }) {
         <ul className={ulClassName} ref={ulRef}>
             <>
               <li>Hello, {user.username}</li>
+              <OpenModalMenuItem
+                itemText="Post to Gallery"
+                onItemClick={closeMenu}
+                modalComponent={<PostEditArtModal />}
+              />
               <li>
                 <button onClick={() => navigate('/art-pieces/manage-spots')}>My Art</button>
               </li>
