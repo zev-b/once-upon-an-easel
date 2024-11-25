@@ -35,4 +35,10 @@ export default function ProfileButton({ user }) {
     };
 
     const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
+
+    return (
+        <>
+        <h4>Profile button stuff</h4>
+        </>
+    )
 }
