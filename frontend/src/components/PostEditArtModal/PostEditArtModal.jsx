@@ -12,7 +12,7 @@ export default function PostEditArtModal() {
     const [buttonDisabled, setButtonDisabled] = useState(true);
     
     //# image url to send to aws
-    const [imgUrl, setImgUrl] = useState("");
+    const [imageId, setImageId] = useState(""); // changed from imgUrl
     //# telling us if we should show the image
     const [showUpload, setShowUpload] = useState(true);
     //# img url we will load in react
@@ -29,23 +29,25 @@ export default function PostEditArtModal() {
         reader.onload = (e) => {
           setPreviewUrl(reader.result);
         }
-        setImgUrl(file);
+        setImageId(file);
         setShowUpload(false);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrors({});
-        const img_url = imgUrl;
-        const form = {img_url};
+        const image = imageId; // was: img_url = imgUrl
+        const form = {image, title, description}; // was: img_url
         const postOrEdit = await dispatch(createArtThunk(user.id, form))
-          .then(closeModal)
-          .catch(async (res) => {
+        .catch(async (res) => {
             const data = await res.json();
             if (data && data.errors) {
-              setErrors(data.errors);
+                setErrors(data.errors);
+            } else {
+                closeModal
             }
-        });
+        })
+        // .then(closeModal);
     };
     
     return (
@@ -73,19 +75,19 @@ export default function PostEditArtModal() {
                 <input
                   type='file'
                   id='file-upload'
-                  name="img_url"
+                  name="image" /* was: img_url */
                   onChange={uploadImage}
                   accept='.jpg, .jpeg, .png, .gif'
                   />
                 </label>
             )}
+                {errors.imageId && (<p>{errors.imageId}</p>)}
             {!showUpload && (
               <div>
                 <img
                   src={previewUrl}
                   alt="preview"
                 />
-               {errors.imgUrl && (<p>{errors.imgUrl}</p>)}
                 <button
                     type="submit"
                 >Submit</button>
