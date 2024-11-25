@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import * as sessionActions from '../../store/session';
 import { PiUserListLight } from "react-icons/pi";
 import OpenModalMenuItem from "./OpenModalItem";
+import './ProfileButton.css';
 
 export default function ProfileButton({ user }) {
     const dispatch = useDispatch();
