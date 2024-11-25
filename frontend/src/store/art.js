@@ -63,25 +63,46 @@ export const fetchArtDetails = (artId) => async (dispatch) => {
 }
 
 //# POST
-export const createArtThunk = (formData) => async (dispatch) => {
-  const response = await csrfFetch('/api/art-pieces', {
-    method: 'POST',
-    body: formData, 
-  });
+export const createArtThunk = (userId, form) => async (dispatch) => {
+  const { image, title, description } = form;
+  try {
+    const formData = new FormData();
 
-  if (response.ok) {
-    const artPiece = await response.json();
-    dispatch(createArt(artPiece));
-    return artPiece;
-  } else {
-    throw new Error('Failed to upload art piece');
+    formData.append('userId', userId);
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('image', image);
+
+    const options = {
+      method: "POST",
+      headers: { 'Content-Type': 'multipart/form-data' },
+      body: formData
+    }
+
+    const res = await csrfFetch('/api/art-pieces', options);
+  
+    if (res.ok) {
+      const artPiece = await res.json();
+      dispatch(createArt(artPiece));
+
+    } else if (res.status < 500) {
+      const data = await res.json();
+
+      if (data.errors) return data
+
+      throw new Error('Failed to upload art piece');
+    }
+    
+    return res;
+  } catch (error) {
+    return error
   }
 };
 
 const initialState = {
   allArt: {},
   artDetails: null,
-  tags: []
+  tags: {}
 };
 
 export const artReducer = (state = initialState, action) => {
