@@ -28,14 +28,16 @@ const createArt = (artPiece) => ({
 });
 
 //# GET all art 
-export const fetchArtThunk = () => async (dispatch) => {
+//! TODO: handle passing in filters to backend route when present...
+export const fetchArtThunk = (filters) => async (dispatch) => {
+  //! ...build fetch url conditionally with filters
   const res = await fetch('api/art-pieces');
   if (res.ok) {
     const data = await res.json();
 
     console.log('\n=== data ===\n', data);
 
-    dispatch(loadArt(data)); // Splash only uses .artPieces, Gallery needs all info
+    dispatch(loadArt(data)); //^ Splash only uses .artPieces, Gallery needs all info
     return data.artPieces;
   } else {
     console.error('Failed to fetch art');
@@ -92,7 +94,7 @@ export const createArtThunk = (userId, form) => async (dispatch) => {
 
       throw new Error('Failed to upload art piece');
     }
-    
+
     return res;
   } catch (error) {
     return error
