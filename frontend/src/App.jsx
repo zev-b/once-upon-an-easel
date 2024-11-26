@@ -56,6 +56,15 @@ const router = createBrowserRouter([
           </>
         )
       },
+      {
+        path: '/art-pieces/manage-art',  
+        element: (
+          <>
+          <Navigation />
+          <ManageArtPage />
+          </>
+        )
+      },
     ],
   },
 ]);
