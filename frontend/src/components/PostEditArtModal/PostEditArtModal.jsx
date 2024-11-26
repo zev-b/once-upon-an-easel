@@ -1,7 +1,7 @@
 // frontend/src/components/PostEditArtModal/PostEditArtModal.jsx
 import { useDispatch, useSelector } from "react-redux";
 import { useModal } from "../../context/Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createArtThunk } from "../../store/art";
 import './PostEditArtModal.css';
 
@@ -13,7 +13,7 @@ export default function PostEditArtModal() {
     const [buttonDisabled, setButtonDisabled] = useState(true);
     
     //# image url to send to aws
-    const [imageId, setImageId] = useState(""); // changed from imgUrl
+    const [imageFile, setImageFile] = useState(""); // changed from imgUrl, imageId
     //# telling us if we should show the image
     const [showUpload, setShowUpload] = useState(true);
     //# img url we will load in react
@@ -23,21 +23,60 @@ export default function PostEditArtModal() {
     const [description, setDescription] = useState("");
     const [errors, setErrors] = useState({});
 
+    useEffect(() => {
+        console.log("Updated imageFile: =>", imageFile);
+        console.log("Updated previewUrl: =>", previewUrl);
+    }, [imageFile, previewUrl]);
+
     const uploadImage = async (e) => {
         const file = e.target.files[0];
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = (e) => {
-          setPreviewUrl(reader.result);
+        console.log("Selected file:=>", file);
+        console.log("Image ID: =>", imageFile);
+        console.log("Preview URL: =>", previewUrl);
+        if (file) {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (e) => {
+            setPreviewUrl(reader.result);
+            }
+            setImageFile(file);
+            setShowUpload(false);
+        } else {
+           
+            setImageFile(null);
+            setErrors((prev) => ({
+                ...prev,
+                image: "An image is required.",
+            }));
         }
-        setImageId(file);
-        setShowUpload(false);
+    };
+
+    const handleErrors = () => {
+        const validationErrors = {};
+
+        if (title.length > 50) {
+            validationErrors.title = "Title must not exceed 50 characters.";
+        }
+
+        if (description.length > 315) {
+            validationErrors.description = "Description must not exceed 315 characters.";
+        }
+
+        if (!imageFile) {
+            validationErrors.image = "An image is required.";
+        }
+
+        setErrors(validationErrors);
+        return Object.keys(validationErrors).length === 0; 
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrors({});
-        const image = imageId; // was: img_url = imgUrl
+        if (!handleErrors()) return;
+        
+        //!================================== 
+        const image = imageFile; // was: img_url = imgUrl
         const form = {image, title, description}; // was: img_url
         const postOrEdit = await dispatch(createArtThunk(user.id, form))
         .catch(async (res) => {
@@ -51,6 +90,26 @@ export default function PostEditArtModal() {
             }
         })
         // .then(closeModal);
+        //!===========================Try Tuesday: Change thunk as well...
+        /*
+        const formData = new FormData();
+        formData.append('userId', user.id);
+        formData.append('title', title);
+        formData.append('description', description);
+        formData.append('image', imageFile);
+
+        try {
+            await dispatch(createArtThunk(formData)); 
+            closeModal(); 
+        } catch (res) {
+            const data = await res.json();
+            if (data.errors) {
+                setErrors(data.errors); 
+            }
+        }
+
+        */ 
+
     };
     
     return (
@@ -108,7 +167,10 @@ export default function PostEditArtModal() {
                   ))}
                 <button
                     type="submit"
-                >Submit</button>
+                    disabled={!imageFile || Object.keys(errors).length > 0}
+                >
+                    Submit
+                </button>
               </div>
             )}
           </div>
