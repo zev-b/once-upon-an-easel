@@ -7,12 +7,12 @@ const CREATE_ART = 'art/createArt';
 // const LOAD_TAGS = '';
 // const CREATE_TAG = '';
 
-const normalizeArt = (artPieces) => {
-  const normalized = {};
-  artPieces.forEach((art) => {
-    normalized[art.id] = art;
-  });
-  return normalized;
+const normalizeArt = (data) => {
+  let artPieces = data.artPieces;
+  return artPieces.reduce((collection, art) => {
+    collection[art.id] = art;
+    return collection;
+  }, {});
 };
 
 const loadArt = (art) => ({
