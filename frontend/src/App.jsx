@@ -5,7 +5,7 @@ import { createBrowserRouter, RouterProvider, Outlet, useNavigate } from 'react-
 // import Navigation from './components/Navigation/Navigation';
 import * as sessionActions from './store/session';
 import WelcomePage from './components/WelcomePage/WelcomePage';
-// import GalleryHome from './components/GalleryHome/GalleryHome';
+import GalleryHome from './components/GalleryHome/GalleryHome';
 import Navigation from './components/Navigation/Navigation';
 
 function Layout() {
@@ -42,7 +42,7 @@ const router = createBrowserRouter([
         element: (
           <>
           <Navigation />
-          {/* <GalleryHome /> */}
+          <GalleryHome />
           </>
         )
       }

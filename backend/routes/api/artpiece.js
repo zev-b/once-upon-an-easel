@@ -287,7 +287,7 @@ router.post('/', singleMulterUpload('image'), validateArtPiece, restoreUser, req
         imageId: imageUrl,
        });
 
-    //^ Deal with Tags here:  
+    //^ Deal with Tags here: -> (Nope, in a separate route)
     //+ for each tag in the array...
     //+ format ea tag: lowercase, trim, replace spaces with hyphens
     // const reqTags = await Promise.all(
