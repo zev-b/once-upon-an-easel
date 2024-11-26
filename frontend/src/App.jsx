@@ -7,6 +7,7 @@ import * as sessionActions from './store/session';
 import WelcomePage from './components/WelcomePage/WelcomePage';
 import GalleryHome from './components/GalleryHome/GalleryHome';
 import Navigation from './components/Navigation/Navigation';
+import ArtDetailsPage from './components/ArtDetailsPage/ArtDetailsPage';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -45,7 +46,16 @@ const router = createBrowserRouter([
           <GalleryHome />
           </>
         )
-      }
+      },
+      {
+        path: '/art-pieces/:artId',  // art-details page
+        element:  (
+          <>
+          <Navigation />
+          <ArtDetailsPage />
+          </>
+        )
+      },
     ],
   },
 ]);

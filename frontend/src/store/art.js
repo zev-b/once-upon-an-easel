@@ -66,7 +66,8 @@ export const fetchArtDetails = (artId) => async (dispatch) => {
   const response = await csrfFetch(`/api/art-pieces/${artId}`);
   if (response.ok) {
       const artPiece = await response.json();
-      dispatch(loadArtDetails(artPiece));
+      // console.log("artPiece", artPiece);
+      dispatch(loadArtDetails(artPiece.art));
   } else {
       console.error(`Failed to get details for artId: ${artId}`);
   }

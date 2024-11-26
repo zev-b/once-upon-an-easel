@@ -14,8 +14,8 @@ export default function GalleryHome() {
         dispatch(fetchArtThunk())
     }, [dispatch]);
 
-    const handleTileClick = (spotId) => {
-        navigate(`/spots/${spotId}`);
+    const handleTileClick = (artId) => {
+        navigate(`/art-pieces/${artId}`);
     };
 
     return (

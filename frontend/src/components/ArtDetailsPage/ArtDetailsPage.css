@@ -1,0 +1,53 @@
+.art-details-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+}
+
+.art-details-page h2 {
+    margin-bottom: 15px;
+    font-size: 2rem;
+}
+
+.details-art-image-container {
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 20px;
+}
+
+.image-itself {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.info-container {
+    margin-top: 20px;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    width: 80%;
+    max-width: 600px;
+}
+
+.artist-name,
+.description,
+.date-added {
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: #ffffff;
+}
+
+.artist-name {
+    font-weight: bold;
+}
+
+.description {
+    font-style: italic;
+}
+
+.date-added {
+    color: #999595;
+}
