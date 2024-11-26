@@ -7,9 +7,17 @@ const CREATE_ART = 'art/createArt';
 // const LOAD_TAGS = '';
 // const CREATE_TAG = '';
 
+const normalizeArt = (artPieces) => {
+  const normalized = {};
+  artPieces.forEach((art) => {
+    normalized[art.id] = art;
+  });
+  return normalized;
+};
+
 const loadArt = (art) => ({
   type: LOAD_ART,
-  art,
+  art: normalizeArt(art),
 });
 
 export const loadArtDetails = (art) => ({
