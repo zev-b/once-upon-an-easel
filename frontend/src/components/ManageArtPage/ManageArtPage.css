@@ -1,0 +1,103 @@
+/* ManageArtPage styling */
+.manage-art-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+  
+.manage-art-container h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    /* color: #f5f3f3; */
+}
+  
+.art-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+    gap: 20px;
+    margin-top: 20px;
+}
+  
+.art-tile {
+    /* background: #f9f9f9; */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+  
+.art-tile:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+  
+.art-tile img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 1px solid #ddd;
+}
+  
+.art-details {
+    padding: 10px;
+    text-align: center;
+}
+  
+.art-card-header h3 {
+    margin: 10px 0;
+    font-size: 1.2rem;
+    color: #555;
+}
+  
+.update-art-button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+  
+.update-art-button:hover {
+    background-color: #0056b3;
+}
+  
+.delete-spot-button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+  
+.delete-spot-button:hover {
+    background-color: #a71d2a;
+}
+  
+.manage-art-container p {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #666;
+}
+  
+.manage-art-container button {
+    padding: 8px 16px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+  
+.manage-art-container button:hover {
+    background-color: #218838;
+}
+  

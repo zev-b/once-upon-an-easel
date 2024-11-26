@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUserArtThunk } from "../../store/art";
 import { Link } from "react-router-dom";
 import OpenModalMenuItem from "../Navigation/OpenModalItem";
+import './ManageArtPage.css';
 
 
 export default function ManageArtPage() {
