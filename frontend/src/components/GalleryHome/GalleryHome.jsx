@@ -12,8 +12,11 @@ export default function GalleryHome() {
 
     useEffect(() => {
         dispatch(fetchArtThunk())
-      }, [dispatch]);
+    }, [dispatch]);
 
+    const handleTileClick = (spotId) => {
+        navigate(`/spots/${spotId}`);
+    };
 
     return (
         <div className="art-list">
