@@ -215,9 +215,7 @@ const validateArtPiece = [
         .withMessage('Description cannot exceed 315 characters.'),
     check('image')
         .exists({ checkFalsy: true })
-        .withMessage('An image is required.')
-        .isString()
-        .withMessage('Image must be a valid string.'),
+        .withMessage('An image is required.'),
     check('tags')
         .optional()
         .isArray()
@@ -233,8 +231,20 @@ router.post('/', singleMulterUpload('image'), validateArtPiece, restoreUser, req
     const userId = req.user.id;
 
     const errors = validationResult(req);
+    // if (!errors.isEmpty()) {
+    //     return res.status(400).json({ errors: errors.array() });
+    // }
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        const errorArray = errors.array();
+        const normalizedErrors = {};
+    
+        for (const error of errorArray) {
+            if (!normalizedErrors[error.param]) {
+                normalizedErrors[error.param] = [];
+            }
+            normalizedErrors[error.param].push(error.msg);
+        }
+        return res.status(400).json({errors: normalizedErrors})
     }
 
     /*
@@ -249,6 +259,17 @@ router.post('/', singleMulterUpload('image'), validateArtPiece, restoreUser, req
         }
         normalizedErrors[error.param].push(error.msg);
     });
+    //! Or: 
+    if (!errors.isEmpty()) {
+    const errorArray = errors.array();
+    const normalizedErrors = {};
+
+    for (const error of errorArray) {
+        if (!normalizedErrors[error.param]) {
+            normalizedErrors[error.param] = [];
+        }
+        normalizedErrors[error.param].push(error.msg);
+    }
     */
 
     let imageUrl;

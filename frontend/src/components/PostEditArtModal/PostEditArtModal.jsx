@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { useState } from "react";
 import { createArtThunk } from "../../store/art";
+import './PostEditArtModal.css';
 
 export default function PostEditArtModal() {
     const user = useSelector(state => state.session.user);
@@ -64,14 +65,24 @@ export default function PostEditArtModal() {
                   onChange={(e) => setTitle(e.target.value)}
                   required 
               />
-               {errors.title && (<p>{errors.title}</p>)}
+               {errors.title &&
+                (Array.isArray(errors.title) ? errors.title : [errors.title]).map((error, index) => (
+                <p key={`title-error-${index}`} className="error-message">
+                    {error}
+                </p>
+                ))}
               <input 
                   type="text"
                   value={description}
                   placeholder="Description(optional)"
                   onChange={(e) => setDescription(e.target.value)}
               />
-               {errors.description && (<p>{errors.description}</p>)}
+               {errors.description &&
+                (Array.isArray(errors.description) ? errors.description : [errors.description]).map((error, index) => (
+                <p key={`title-error-${index}`} className="error-message">
+                    {error}
+                </p>
+                ))}
             {showUpload && (
                 <label htmlFor='file-upload'> Select From Computer
                 <input
@@ -83,13 +94,18 @@ export default function PostEditArtModal() {
                   />
                 </label>
             )}
-                {errors.imageId && (<p>{errors.imageId}</p>)}
             {!showUpload && (
-              <div>
+                <div>
                 <img
                   src={previewUrl}
                   alt="preview"
-                />
+                  />
+                  {errors.image &&
+                  (Array.isArray(errors.image) ? errors.image : [errors.image]).map((error, index) => (
+                  <p key={`title-error-${index}`} className="error-message">
+                      {error}
+                  </p>
+                  ))}
                 <button
                     type="submit"
                 >Submit</button>
