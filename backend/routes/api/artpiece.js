@@ -213,11 +213,11 @@ const validateArtPiece = [
         .optional()
         .isLength({ min: 0, max: 315 })
         .withMessage('Description cannot exceed 315 characters.'),
-    check('imageId')
+    check('image')
         .exists({ checkFalsy: true })
         .withMessage('An image is required.')
         .isString()
-        .withMessage('Image ID must be a valid string.'),
+        .withMessage('Image must be a valid string.'),
     check('tags')
         .optional()
         .isArray()
@@ -227,15 +227,29 @@ const validateArtPiece = [
 ];
 
 //# POST art img-upload with S3
-router.post('/', singleMulterUpload('image'), /*validateArtPiece,*/ restoreUser, requireAuth, async (req, res, next) => {
+router.post('/', singleMulterUpload('image'), validateArtPiece, restoreUser, requireAuth, async (req, res, next) => {
 
     const { title, description } = req.body;
     const userId = req.user.id;
 
-    // const errors = validationResult(req);
-    // if (!errors.isEmpty()) {
-    //     return res.status(400).json({ errors: errors.array() });
-    // }
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    /*
+    if (!errors.isEmpty()) {
+    const errorArray = errors.array();
+    const normalizedErrors = {};
+
+    Object.keys(errorArray).forEach(key => {
+        const error = errorArray[key];
+        if (!normalizedErrors[error.param]) {
+            normalizedErrors[error.param] = [];
+        }
+        normalizedErrors[error.param].push(error.msg);
+    });
+    */
 
     let imageUrl;
 
@@ -264,13 +278,12 @@ router.post('/', singleMulterUpload('image'), /*validateArtPiece,*/ restoreUser,
     //         return tag;
     //     })
     // );
-        console.log("\n ===Img Url==== \n", imageUrl);
-        // res.status(201)
+        // console.log("\n ===Img Url==== \n", imageUrl)
+
        res.status(201).json(newArt /*{imageUrl}*/);
     } catch (error) {
         next(error)
     }
-
 });
 
 

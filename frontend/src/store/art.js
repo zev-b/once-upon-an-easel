@@ -67,7 +67,7 @@ export const fetchArtDetails = (artId) => async (dispatch) => {
 //# POST
 export const createArtThunk = (userId, form) => async (dispatch) => {
   const { image, title, description } = form;
-  try {
+  // try {
     const formData = new FormData();
 
     formData.append('userId', userId);
@@ -96,9 +96,10 @@ export const createArtThunk = (userId, form) => async (dispatch) => {
     }
 
     return res;
-  } catch (error) {
-    return error
-  }
+  // } catch (error) {
+  //   console.log(`==Thunk error==`, error);
+  //   return error
+  // }
 };
 
 const initialState = {

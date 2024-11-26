@@ -41,10 +41,12 @@ export default function PostEditArtModal() {
         const postOrEdit = await dispatch(createArtThunk(user.id, form))
         .catch(async (res) => {
             const data = await res.json();
+            console.log(`\n== Data: ==\n`, data);
             if (data && data.errors) {
+                console.log(`\n== Errors: ==\n`, data.errors);
                 setErrors(data.errors);
             } else {
-                closeModal
+                closeModal();
             }
         })
         // .then(closeModal);
