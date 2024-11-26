@@ -8,6 +8,7 @@ import WelcomePage from './components/WelcomePage/WelcomePage';
 import GalleryHome from './components/GalleryHome/GalleryHome';
 import Navigation from './components/Navigation/Navigation';
 import ArtDetailsPage from './components/ArtDetailsPage/ArtDetailsPage';
+import ManageArtPage from './components/ManageArtPage/ManageArtPage';
 
 function Layout() {
   const dispatch = useDispatch();

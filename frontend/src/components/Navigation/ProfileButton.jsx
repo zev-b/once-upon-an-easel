@@ -57,7 +57,11 @@ export default function ProfileButton({ user }) {
                 modalComponent={<PostEditArtModal />}
               />
               <li>
-                <button onClick={() => navigate('/art-pieces/manage-spots')}>My Art</button>
+                <button onClick={() => {
+                        closeMenu()
+                        navigate('/art-pieces/manage-art')
+                    }}>My Art
+                    </button>
               </li>
               <li>
                 <button onClick={logout}>Log Out</button>
