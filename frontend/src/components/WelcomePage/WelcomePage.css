@@ -1,0 +1,33 @@
+.handwritten-typewriter {
+  font-family: 'Bonheur Royale', cursive;
+  font-size: 5em; 
+  font-weight: bold;
+  font-style: normal;
+  overflow: hidden; 
+  white-space: nowrap;
+  width: fit-content; 
+  animation: typing 4s steps(40, end) 10s infinite; /* try to get 10s delay to work*/
+  animation-iteration-count: infinite; 
+}
+
+.handwritten-text {
+  display: inline-block;
+}
+
+@keyframes typing {
+    0% {
+      width: 0;
+    }
+    100% {
+      width: 100%;
+    }
+}
+  
+@keyframes restart {
+    from {
+      visibility: visible;
+    }
+    to {
+      visibility: hidden;
+    }
+}
