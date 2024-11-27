@@ -24,11 +24,6 @@ export default function PostEditArtModal({ art, isEditing = false }) {
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
-        console.log("Updated imageFile: =>", imageFile);
-        console.log("Updated previewUrl: =>", previewUrl);
-    }, [imageFile, previewUrl]);
-
-    useEffect(() => {
         if (art && isEditing) {
             setTitle(art.title);
             setDescription(art.description);
@@ -37,21 +32,28 @@ export default function PostEditArtModal({ art, isEditing = false }) {
         }
     }, [art, isEditing]);
 
+    useEffect(() => {
+        setButtonDisabled(
+            !imageFile ||
+            title.length > 50 ||
+            description.length > 315 ||
+            Object.keys(errors).some((key) => errors[key])
+        );
+    }, [imageFile, title, description, errors]);
+
     const uploadImage = async (e) => {
         const file = e.target.files[0];
-        console.log("Selected file:=>", file);
-        console.log("Image ID: =>", imageFile);
-        console.log("Preview URL: =>", previewUrl);
+        // console.log("Selected file:=>", file);
+        // console.log("Image ID: =>", imageFile);
+        // console.log("Preview URL: =>", previewUrl);
         if (file) {
             const reader = new FileReader();
             reader.readAsDataURL(file);
-            reader.onload = (e) => {
-            setPreviewUrl(reader.result);
-            }
+            reader.onload = (e) => setPreviewUrl(reader.result);
             setImageFile(file);
             setShowUpload(false);
+            setErrors((prev) => ({ ...prev, image: null }));
         } else {
-           
             setImageFile(null);
             setErrors((prev) => ({
                 ...prev,
@@ -60,72 +62,36 @@ export default function PostEditArtModal({ art, isEditing = false }) {
         }
     };
 
-    const handleErrors = () => {
-        const validationErrors = {};
-
-        if (title.length > 50) {
-            validationErrors.title = "Title must not exceed 50 characters.";
-        }
-
-        if (description.length > 315) {
-            validationErrors.description = "Description must not exceed 315 characters.";
-        }
-
-        if (!imageFile) {
-            validationErrors.image = "An image is required.";
-        }
-
-        setErrors(validationErrors);
-        return Object.keys(validationErrors).length === 0; 
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setErrors({});
-        if (!handleErrors()) return;
-        
+
+        const validationErrors = {};
+
+        if (title.length > 50) validationErrors.title = "Title must not exceed 50 characters.";
+        if (description.length > 315) validationErrors.description = "Description must not exceed 315 characters.";
+        if (!imageFile) validationErrors.image = "An image is required.";
+
+        if (Object.keys(validationErrors).length) {
+            setErrors(validationErrors);
+            return;
+        }
         //!================================== 
         const image = imageFile; // was: img_url = imgUrl
-        const form = {image, title, description}; // was: img_url
-        const postOrEdit = await dispatch(createArtThunk(user.id, form))
-        .catch(async (res) => {
-            const data = await res.json();
-            console.log(`\n== Data: ==\n`, data);
-            if (data && data.errors) {
-                console.log(`\n== Errors: ==\n`, data.errors);
-                setErrors(data.errors);
-            } else {
-                closeModal();
-            }
-        })
-        // .then(closeModal);
-        //!===========================Try Tuesday: Change thunk as well...
-        /*
-        const formData = new FormData();
-        formData.append('userId', user.id);
-        formData.append('title', title);
-        formData.append('description', description);
-        formData.append('image', imageFile);
+        const form = { image, title, description }; // was: img_url
 
         try {
-            await dispatch(createArtThunk(formData)); 
-            closeModal(); 
+            if (isEditing) {
+                await dispatch(updateArtThunk(art.id, form));
+            } else {
+                await dispatch(createArtThunk(user.id, form));
+            }
+                closeModal();
         } catch (res) {
             const data = await res.json();
-            if (data.errors) {
-                setErrors(data.errors); 
+            if (data && data.errors) {
+                setErrors(data.errors);
             }
-        }
-
-        */ 
-
-        if (isEditing) {
-            await dispatch(updateArtThunk(art.id, form));
-        } else {
-            await dispatch(createArtThunk(user.id, form));
-        }
-        closeModal();
-
+        }        
     };
     
     return (
@@ -137,7 +103,14 @@ export default function PostEditArtModal({ art, isEditing = false }) {
                   type="text"
                   value={title}
                   placeholder="Title"
-                  onChange={(e) => setTitle(e.target.value)}
+                  onChange={(e) => {
+                    setTitle(e.target.value);
+                    setErrors((prev) => ({
+                        ...prev,
+                        title: e.target.value.length > 50 ? "Title must not exceed 50 characters." : null,
+                    }));
+                  }}
+                  className={errors.title ? "error-border" : ""}
                   required 
               />
                {errors.title &&
@@ -150,7 +123,14 @@ export default function PostEditArtModal({ art, isEditing = false }) {
                   type="text"
                   value={description}
                   placeholder="Description(optional)"
-                  onChange={(e) => setDescription(e.target.value)}
+                  onChange={(e) => {
+                    setDescription(e.target.value);
+                    setErrors((prev) => ({
+                        ...prev,
+                        description: e.target.value.length > 315 ? "Description must not exceed 315 characters." : null,
+                    }));
+                  }}
+                  className={errors.description ? "error-border" : ""}
               />
                {errors.description &&
                 (Array.isArray(errors.description) ? errors.description : [errors.description]).map((error, index) => (
@@ -183,9 +163,9 @@ export default function PostEditArtModal({ art, isEditing = false }) {
                   ))}
                 <button
                     type="submit"
-                    disabled={!imageFile || Object.keys(errors).length > 0}
+                    disabled={buttonDisabled}
                 >
-                    {isEditing ? "Save Changes" : "Submit"}
+                    {isEditing ? "Save Changes" : "Post to Gallery"}
                 </button>
               </div>
             )}

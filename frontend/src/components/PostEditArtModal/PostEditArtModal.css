@@ -1,4 +1,26 @@
+.error-border {
+    border: 2px solid red;
+}
+
 .error-message {
     color: rgb(110, 18, 18);
     font-size: 0.9rem;
+}
+
+input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    /* margin-bottom: 10px; */
+}
+
+input:focus {
+    outline: none;
+    /* border-color: #007bff; */
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    margin: 10px 0;
 }
