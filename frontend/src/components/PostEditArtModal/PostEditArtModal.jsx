@@ -55,7 +55,7 @@ export default function PostEditArtModal({ art, isEditing = false }) {
             setImageFile(null);
             setErrors((prev) => ({
                 ...prev,
-                image: "An image is required.",
+                image: "An image is required frontend.",
             }));
         }
     };
@@ -72,7 +72,7 @@ export default function PostEditArtModal({ art, isEditing = false }) {
         }
 
         if (!imageFile) {
-            validationErrors.image = "An image is required.";
+            validationErrors.image = "An image is required frontend.";
         }
 
         setErrors(validationErrors);
@@ -120,9 +120,9 @@ export default function PostEditArtModal({ art, isEditing = false }) {
         */ 
 
         if (isEditing) {
-            await dispatch(updateArtThunk(art.id, formData));
+            await dispatch(updateArtThunk(art.id, form));
         } else {
-            await dispatch(createArtThunk(user.id, formData));
+            await dispatch(createArtThunk(user.id, form));
         }
         closeModal();
 
