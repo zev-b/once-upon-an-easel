@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { createArtThunk } from "../../store/art";
 import './PostEditArtModal.css';
 
-export default function PostEditArtModal() {
+export default function PostEditArtModal({ art, isEditing = false }) {
     const user = useSelector(state => state.session.user);
     const dispatch = useDispatch();
     const { closeModal } = useModal();
@@ -27,6 +27,15 @@ export default function PostEditArtModal() {
         console.log("Updated imageFile: =>", imageFile);
         console.log("Updated previewUrl: =>", previewUrl);
     }, [imageFile, previewUrl]);
+
+    useEffect(() => {
+        if (art && isEditing) {
+            setTitle(art.title);
+            setDescription(art.description);
+            setPreviewUrl(art.imageId);
+            setShowUpload(false);
+        }
+    }, [art, isEditing]);
 
     const uploadImage = async (e) => {
         const file = e.target.files[0];
@@ -110,11 +119,18 @@ export default function PostEditArtModal() {
 
         */ 
 
+        if (isEditing) {
+            await dispatch(updateArtThunk(art.id, formData));
+        } else {
+            await dispatch(createArtThunk(user.id, formData));
+        }
+        closeModal();
+
     };
     
     return (
         <div>
-        <h1>Post/Edit art Modal</h1>
+        <h1>{isEditing ? "Edit Art" : "Post Art"}</h1>
         <form onSubmit={handleSubmit}>
           <div>
               <input 
@@ -169,7 +185,7 @@ export default function PostEditArtModal() {
                     type="submit"
                     disabled={!imageFile || Object.keys(errors).length > 0}
                 >
-                    Submit
+                    {isEditing ? "Save Changes" : "Submit"}
                 </button>
               </div>
             )}

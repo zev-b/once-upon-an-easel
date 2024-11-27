@@ -307,6 +307,80 @@ router.post('/', singleMulterUpload('image'), validateArtPiece, restoreUser, req
     }
 });
 
+//# PUT art img-upload with S3 
+router.put('/:artId', singleMulterUpload('image'), validateArtPiece, restoreUser, requireAuth, async (req, res, next) => {
+
+    const { title, description } = req.body;
+    const userId = req.user.id;
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        const errorArray = errors.array();
+        const normalizedErrors = {};
+    
+        for (const error of errorArray) {
+            if (!normalizedErrors[error.param]) {
+                normalizedErrors[error.param] = [];
+            }
+            normalizedErrors[error.param].push(error.msg);
+        }
+        return res.status(400).json({errors: normalizedErrors})
+    }
+
+    let artById = await ArtPiece.findByPk(req.params.artId);
+
+    if (!artById) {
+        return res.status(404).json({ message: "Art couldn't be found" })
+    }
+
+    if (artById.userId !== userId) {
+        return res.status(403).json({ message: "Art must belong to user" })
+    }
+
+    let imageUrl;
+
+    try {
+       if (req.file) {
+           imageUrl = await singlePublicFileUpload(req.file);
+       }
+  
+       artById = await ArtPiece.update({
+            userId: req.user.id,
+            title,
+            description,
+            imageId: imageUrl,
+       });
+
+       res.status(200).json(updatedArt);
+    } catch (error) {
+        next(error)
+    }
+});
+
+//# DELETE art  
+router.delete('/:artId', restoreUser, requireAuth, async (req, res, next) => {
+    const userId = req.user.id;
+
+    let artById = await ArtPiece.findByPk(req.params.artId);
+
+    if (!artById) {
+        return res.status(404).json({ message: "Art couldn't be found" })
+    }
+
+    if (artById.userId !== userId) {
+        return res.status(403).json({ message: "Art must belong to user" })
+    }
+
+    try {
+       await artById.destroy();
+
+       res.status(200).json({ message: "Successfully deleted" });
+    } catch (error) {
+        next(error)
+    }
+});
+
 
 module.exports = router;
 

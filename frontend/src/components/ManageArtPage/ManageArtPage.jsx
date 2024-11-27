@@ -1,13 +1,20 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserArtThunk } from "../../store/art";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import OpenModalMenuItem from "../Navigation/OpenModalItem";
+import OpenModalButton from "../OpenModalButton/OpenModalButton";
+import { LiaEdit } from "react-icons/lia";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import PostEditArtModal from "../PostEditArtModal/PostEditArtModal";
+import DeleteArtModal from "../DeleteArtModal/DeleteArtModal";
 import './ManageArtPage.css';
 
 
 export default function ManageArtPage() {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const user = useSelector(state => state.session.user);
     const allArt = useSelector(state => state.art.allArt);
 
@@ -40,17 +47,25 @@ export default function ManageArtPage() {
 
                 <h3>{art.title}</h3>
               </div>
+              <OpenModalMenuItem
+                                    itemText={<LiaEdit />}
+                                    modalComponent={<PostEditArtModal art={art} isEditing={true} />}
+                                />
 
-                <button className="update-art-button" onClick={(e) => handleUpdateArt(e, art.id)}>Update</button>
-{/* 
-                <OpenModalButton buttonText="Delete" className="delete-spot-button" modalComponent={<DelArtModal spotId={art.id}/>}/> */}
+                {/* <button className="update-art-button" onClick={(e) => handleUpdateArt(e, art.id)}><LiaEdit /></button> */}
+
+                <OpenModalButton buttonText={<RiDeleteBin6Line />} className="delete-art-button" modalComponent={<DeleteArtModal artId={art.id}/>}/>
                 </div>
             </div>
           ))}
         </div>
       ) : (
         <div>
-          <p>No art found. <Link to='/art-pieces/'><button>Post to the gallery</button></Link></p>
+          <p>No art found. <OpenModalMenuItem
+                                    itemText="Post to the gallery instead!"
+                                    modalComponent={<PostEditArtModal />}
+                                />
+            </p>
         </div>
       )}
     </div>

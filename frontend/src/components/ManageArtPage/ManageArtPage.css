@@ -48,14 +48,14 @@
 .art-card-header h3 {
     margin: 10px 0;
     font-size: 1.2rem;
-    color: #555;
+    color: #f8f4f4;
 }
   
 .update-art-button {
     margin-top: 10px;
-    padding: 8px 12px;
+    /* padding: 8px 12px; */
     background-color: #007bff;
-    color: white;
+    color: green;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -66,7 +66,7 @@
     background-color: #0056b3;
 }
   
-.delete-spot-button {
+.delete-art-button {
     margin-top: 10px;
     padding: 8px 12px;
     background-color: #dc3545;
@@ -77,7 +77,7 @@
     transition: background-color 0.3s ease;
 }
   
-.delete-spot-button:hover {
+.delete-art-button:hover {
     background-color: #a71d2a;
 }
   
