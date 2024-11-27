@@ -47,14 +47,19 @@ export default function ManageArtPage() {
 
                 <h3>{art.title}</h3>
               </div>
-              <OpenModalMenuItem
-                                    itemText={<LiaEdit />}
-                                    modalComponent={<PostEditArtModal art={art} isEditing={true} />}
-                                />
+                <OpenModalButton
+                    buttonText={<LiaEdit />}
+                    className="edit-art-button"
+                    modalComponent={<PostEditArtModal art={art} isEditing={true} />}
+                />
 
                 {/* <button className="update-art-button" onClick={(e) => handleUpdateArt(e, art.id)}><LiaEdit /></button> */}
 
-                <OpenModalButton buttonText={<RiDeleteBin6Line />} className="delete-art-button" modalComponent={<DeleteArtModal artId={art.id}/>}/>
+                <OpenModalButton 
+                    buttonText={<RiDeleteBin6Line />} 
+                    className="delete-art-button" 
+                    modalComponent={<DeleteArtModal artId={art.id}/>}
+                />
                 </div>
             </div>
           ))}
