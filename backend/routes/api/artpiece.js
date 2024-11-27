@@ -213,9 +213,9 @@ const validateArtPiece = [
         .optional()
         .isLength({ min: 0, max: 315 })
         .withMessage('Description cannot exceed 315 characters.'),
-    check('image')
-        .exists({ checkFalsy: true })
-        .withMessage('An image is required.'),
+    // check('image')
+    //     .exists({ checkFalsy: true })
+    //     .withMessage('An image is required.'),
     check('tags')
         .optional()
         .isArray()
@@ -275,6 +275,10 @@ router.post('/', singleMulterUpload('image'), validateArtPiece, restoreUser, req
     let imageUrl;
 
     try {
+        if (!req.file) {
+            return res.status(400).json({ errors: { image: ["An image is required."] } });
+        } 
+
        if (req.file) {
            imageUrl = await singlePublicFileUpload(req.file);
        }

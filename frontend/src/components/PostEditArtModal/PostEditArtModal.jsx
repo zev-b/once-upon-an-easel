@@ -55,7 +55,7 @@ export default function PostEditArtModal({ art, isEditing = false }) {
             setImageFile(null);
             setErrors((prev) => ({
                 ...prev,
-                image: "An image is required frontend.",
+                image: "An image is required.",
             }));
         }
     };
@@ -72,7 +72,7 @@ export default function PostEditArtModal({ art, isEditing = false }) {
         }
 
         if (!imageFile) {
-            validationErrors.image = "An image is required frontend.";
+            validationErrors.image = "An image is required.";
         }
 
         setErrors(validationErrors);
