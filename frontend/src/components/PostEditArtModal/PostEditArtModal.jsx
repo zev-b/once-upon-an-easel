@@ -173,5 +173,4 @@ export default function PostEditArtModal({ art, isEditing = false }) {
         </form>
     </div>
     )
-
 }

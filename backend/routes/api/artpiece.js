@@ -231,9 +231,7 @@ router.post('/', singleMulterUpload('image'), validateArtPiece, restoreUser, req
     const userId = req.user.id;
 
     const errors = validationResult(req);
-    // if (!errors.isEmpty()) {
-    //     return res.status(400).json({ errors: errors.array() });
-    // }
+
     if (!errors.isEmpty()) {
         const errorArray = errors.array();
         const normalizedErrors = {};
@@ -246,31 +244,6 @@ router.post('/', singleMulterUpload('image'), validateArtPiece, restoreUser, req
         }
         return res.status(400).json({errors: normalizedErrors})
     }
-
-    /*
-    if (!errors.isEmpty()) {
-    const errorArray = errors.array();
-    const normalizedErrors = {};
-
-    Object.keys(errorArray).forEach(key => {
-        const error = errorArray[key];
-        if (!normalizedErrors[error.param]) {
-            normalizedErrors[error.param] = [];
-        }
-        normalizedErrors[error.param].push(error.msg);
-    });
-    //! Or: 
-    if (!errors.isEmpty()) {
-    const errorArray = errors.array();
-    const normalizedErrors = {};
-
-    for (const error of errorArray) {
-        if (!normalizedErrors[error.param]) {
-            normalizedErrors[error.param] = [];
-        }
-        normalizedErrors[error.param].push(error.msg);
-    }
-    */
 
     let imageUrl;
 
@@ -305,7 +278,7 @@ router.post('/', singleMulterUpload('image'), validateArtPiece, restoreUser, req
     // );
         // console.log("\n ===Img Url==== \n", imageUrl)
 
-       res.status(201).json(newArt /*{imageUrl}*/);
+       res.status(201).json(newArt);
     } catch (error) {
         next(error)
     }
@@ -384,7 +357,6 @@ router.delete('/:artId', restoreUser, requireAuth, async (req, res, next) => {
         next(error)
     }
 });
-
 
 module.exports = router;
 
