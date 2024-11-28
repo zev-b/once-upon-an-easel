@@ -12,6 +12,15 @@
     justify-items: start;
 }
 
+.nav-link {
+    color: white; 
+    text-decoration: none; 
+    font-size: 2.33rem;
+    font-weight: bold;
+    font-family: 'Bonheur Royale', cursive;
+    padding: 8px 16px;
+}
+
 /*//! ==== OpenModalItem == TODO: NEST styles so dropdown doesnt conflict with navbar items*/
 li {
     padding: 10px;

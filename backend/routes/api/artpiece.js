@@ -277,8 +277,8 @@ router.post('/', singleMulterUpload('image'), validateArtPiece, restoreUser, req
     //     })
     // );
         // console.log("\n ===Img Url==== \n", imageUrl)
-
-       res.status(201).json(newArt);
+      
+       res.status(201).json({ ...newArt.toJSON(), user: req.user });
     } catch (error) {
         next(error)
     }

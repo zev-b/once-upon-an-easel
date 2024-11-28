@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
-// import { deleteArtThunk } from "../../store/spots";
+import { deleteArtThunk } from "../../store/art";
 import './DeleteArtModal.css';
 
 export default function DeleteArtModal({ artId }) {
@@ -11,7 +11,8 @@ export default function DeleteArtModal({ artId }) {
 
     const handleDelete = async () => {
         try {
-            // await dispatch(deleteArtThunk(artId))
+            await dispatch(deleteArtThunk(artId))
+            closeModal()
         } catch (error) {
             setError(error.message)
         }

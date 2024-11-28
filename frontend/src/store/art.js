@@ -7,6 +7,7 @@ const LOAD_USER_ART = 'art/loadUserArt';
 const LOAD_ART_DETAILS = 'art/loadArtDetails';
 const CREATE_ART = 'art/createArt';
 const UPDATE_ART = 'art/updateArt';
+const DELETE_ART = 'art/deleteArt';
 // const LOAD_TAGS = '';
 // const CREATE_TAG = '';
 
@@ -45,6 +46,11 @@ export const createArt = (artPiece) => ({
 export const updateArt = (artPiece) => ({
   type: UPDATE_ART,
   artPiece,
+})
+
+export const deleteArt = (artId) => ({
+  type: DELETE_ART,
+  artId
 })
 
 //# GET all art 
@@ -140,6 +146,24 @@ export const updateArtThunk = (artId, form) => async (dispatch) => {
   return res;
 };
 
+//# DELETE 
+export const deleteArtThunk = (artId) => async (dispatch) => {
+  const res = await csrfFetch(`/api/art-pieces/${artId}`, {
+    method: 'DELETE'
+  })
+
+  if (res.ok) {
+    const data = await res.json();
+    dispatch(deleteArt(artId));
+    return data;
+  } else if (res.status < 500) {
+    const error = await res.json();
+    return error;
+  } else {
+    throw res;
+  }
+}
+
 const initialState = {
   allArt: {},
   artDetails: null,
@@ -158,6 +182,11 @@ export const artReducer = (state = initialState, action) => {
     case CREATE_ART:
     case UPDATE_ART:
       return { ...state, allArt: { ...state.allArt, [action.artPiece.id]: action.artPiece } };
+    case DELETE_ART: 
+      return { 
+        ...state,
+        allArt: Object.fromEntries(Object.entries(state.allArt).filter(([ id ]) => id != action.artId))
+       }
     default:
       return state;
   }
