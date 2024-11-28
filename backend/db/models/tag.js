@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
       validate: {
         len: [1, 24],
+        // is: /^[0-9a-zA-Z -]+$/,
       },
     },
   }, {

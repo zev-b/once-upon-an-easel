@@ -418,7 +418,7 @@ router.put('/:artId/tags/:tagId', validateTag, restoreUser, requireAuth, async (
     }
 
     const { tagName } = req.body;
-    const { tagId } = req.params;
+    const { artId, tagId } = req.params;
 
     try {
         const formattedTagName = tagName.toLowerCase().replace(/\s+/g, '-');
@@ -429,10 +429,33 @@ router.put('/:artId/tags/:tagId', validateTag, restoreUser, requireAuth, async (
             return res.status(404).json({ message: "Tag not found." });
         }
 
+        const artTagCount = await ArtTag.count({ where: { tagId } });
+
+        if (artTagCount > 1) {
+            // when other art have the tag, create a new tag with new name
+            const [newTag, created] = await Tag.findOrCreate({
+                where: { name: formattedTagName },
+                defaults: { name: formattedTagName }
+            });
+
+            if (!created) {
+                // If the new tag already exists, ensure no duplicate associations
+                const existingAssociation = await ArtTag.findOne({ where: { artId, tagId: newTag.id } });
+                if (existingAssociation) {
+                    return res.status(400).json({ message: "The art piece already has this tag." });
+                }
+            }
+
+            await ArtTag.destroy({ where: { artId, tagId } }); // destroy old pair on join
+            await ArtTag.create({ artId, tagId: newTag.id }); // create new pair on join
+
+            return res.status(201).json(newTag);
+        }
+
         tag.name = formattedTagName;
         await tag.save();
 
-        res.json(tag);
+        res.status(200).json(tag);
     } catch (error) {
         next(error);
     }
