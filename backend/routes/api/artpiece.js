@@ -256,7 +256,6 @@ router.post('/', singleMulterUpload('image'), validateArtPiece, restoreUser, req
            imageUrl = await singlePublicFileUpload(req.file);
        }
 
-    //^ Deal with ArtPiece here   
        const newArt = await ArtPiece.create({
         userId,
         title,
@@ -284,7 +283,7 @@ router.post('/', singleMulterUpload('image'), validateArtPiece, restoreUser, req
     }
 });
 
-//# PUT updating title and description only 
+//# PUT - updating title and description only 
 router.put('/:artId', validateArtPiece, restoreUser, requireAuth, async (req, res, next) => {
 
     const { title, description } = req.body;
@@ -349,6 +348,104 @@ router.delete('/:artId', restoreUser, requireAuth, async (req, res, next) => {
        res.status(200).json({ message: "Successfully deleted" });
     } catch (error) {
         next(error)
+    }
+});
+
+//# ========= TAGS ===========
+
+const validateTag = [
+    check('tagName')
+        .trim()
+        .notEmpty().withMessage('Tag name is required.')
+        .isLength({ max: 24 }).withMessage('Tag name cannot exceed 24 characters.')
+        .matches(/^[0-9a-zA-Z -]+$/).withMessage('Tag name must be alphanumeric, spaces, or hyphens.')
+];
+
+//# POST tag
+router.post('/:artId/tags', validateTag, restoreUser, requireAuth, async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { tagName } = req.body;
+    const { artId } = req.params;
+
+    try {
+        const formattedTagName = tagName.toLowerCase().replace(/\s+/g, '-');
+        const artTagsCount = await ArtTag.count({ where: { artId } });
+
+        if (artTagsCount >= 3) {
+            return res.status(400).json({ message: "An art piece cannot have more than 3 tags." });
+        }
+
+        let tag = await Tag.findOrCreate({
+            where: { name: formattedTagName },
+            defaults: { name: formattedTagName }
+        });
+
+        const [newTag, created] = tag;
+
+        await ArtTag.create({ artId, tagId: newTag.id });
+        res.status(201).json(newTag);
+
+    } catch (error) {
+        next(error);
+    }
+});
+
+//# PUT tag(s)
+router.put('/:artId/tags/:tagId', validateTag, restoreUser, requireAuth, async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { tagName } = req.body;
+    const { tagId } = req.params;
+
+    try {
+        const formattedTagName = tagName.toLowerCase().replace(/\s+/g, '-');
+
+        let tag = await Tag.findByPk(tagId);
+
+        if (!tag) {
+            return res.status(404).json({ message: "Tag not found." });
+        }
+
+        tag.name = formattedTagName;
+        await tag.save();
+
+        res.json(tag);
+    } catch (error) {
+        next(error);
+    }
+});
+
+//# DELETE tag(s)
+router.delete('/:artId/tags/:tagId', restoreUser, requireAuth, async (req, res, next) => {
+    const { artId, tagId } = req.params;
+
+    try {
+        const artTag = await ArtTag.findOne({ where: { artId, tagId } });
+
+        if (!artTag) {
+            return res.status(404).json({ message: "Tag association not found." });
+        }
+
+        await artTag.destroy();
+
+        // Check if the tag is still associated with any art
+        const remainingAssociations = await ArtTag.count({ where: { tagId } });
+
+        if (remainingAssociations === 0) {
+            const tag = await Tag.findByPk(tagId);
+            await tag.destroy();
+        }
+
+        res.status(200).json({ message: "Tag successfully removed." });
+    } catch (error) {
+        next(error);
     }
 });
 
