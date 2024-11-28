@@ -1,6 +1,5 @@
 import { csrfFetch } from './csrf';
 
-
 const CLEAR_ART_STATE = 'art/clearArtState';
 const LOAD_ART = 'art/loadArt';
 const LOAD_USER_ART = 'art/loadUserArt';
