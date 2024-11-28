@@ -9,8 +9,6 @@ const { singleMulterUpload, singlePublicFileUpload } = require('../../utils/awsS
 const router = express.Router();
 
 
-
-
 //#  GET all art-pieces with pagination and optional filtering by tag
 router.get('/', async (req, res, next) => {
     try {
@@ -365,7 +363,16 @@ const validateTag = [
 router.post('/:artId/tags', validateTag, restoreUser, requireAuth, async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        const errorArray = errors.array();
+        const normalizedErrors = {};
+    
+        for (const error of errorArray) {
+            if (!normalizedErrors[error.param]) {
+                normalizedErrors[error.param] = [];
+            }
+            normalizedErrors[error.param].push(error.msg);
+        }
+        return res.status(400).json({errors: normalizedErrors})
     }
 
     const { tagName } = req.body;
@@ -398,7 +405,16 @@ router.post('/:artId/tags', validateTag, restoreUser, requireAuth, async (req, r
 router.put('/:artId/tags/:tagId', validateTag, restoreUser, requireAuth, async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        const errorArray = errors.array();
+        const normalizedErrors = {};
+    
+        for (const error of errorArray) {
+            if (!normalizedErrors[error.param]) {
+                normalizedErrors[error.param] = [];
+            }
+            normalizedErrors[error.param].push(error.msg);
+        }
+        return res.status(400).json({errors: normalizedErrors})
     }
 
     const { tagName } = req.body;
