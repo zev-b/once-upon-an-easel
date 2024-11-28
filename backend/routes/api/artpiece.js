@@ -12,25 +12,25 @@ const router = express.Router();
 //#  GET all art-pieces with pagination and optional filtering by tag
 router.get('/', async (req, res, next) => {
     try {
-        const queryErrors = {};
+        // const queryErrors = {};
 
-        const page = parseInt(req.query.page);
-        const size = parseInt(req.query.size);
+        // const page = parseInt(req.query.page);
+        // const size = parseInt(req.query.size);
         
-        if (page < 1) {
-            queryErrors.page = 'Page must be greater than or equal to 1';
-        }
+        // if (page < 1) {
+        //     queryErrors.page = 'Page must be greater than or equal to 1';
+        // }
 
-        if (size < 1 || size > 20) {
-            queryErrors.size = 'Size must be between 1 and 20';
-        }
+        // if (size < 1 || size > 20) {
+        //     queryErrors.size = 'Size must be between 1 and 20';
+        // }
 
-        if (Object.keys(queryErrors).length) {
-            return res.status(400).json({ message: 'Bad Request', errors: queryErrors });
-        }
+        // if (Object.keys(queryErrors).length) {
+        //     return res.status(400).json({ message: 'Bad Request', errors: queryErrors });
+        // }
 
-        const limit = size || 20;
-        const offset = ((page || 1) - 1) * limit;
+        // const limit = size || 20;
+        // const offset = ((page || 1) - 1) * limit;
         
 
         let whereTags = {};
@@ -64,8 +64,8 @@ router.get('/', async (req, res, next) => {
         }
     
         const artPieces = await ArtPiece.findAndCountAll({
-            limit,
-            offset,
+            // limit,
+            // offset,
             distinct: true,
             include: [
                 {
@@ -85,8 +85,8 @@ router.get('/', async (req, res, next) => {
         
         // response
         const result = {
-            page: page || 1,
-            size: limit,
+            // page: page || 1,
+            // size: limit,
             total: artPieces.count,
             artPieces: artPieces.rows.map((art) => ({
                 id: art.id,
