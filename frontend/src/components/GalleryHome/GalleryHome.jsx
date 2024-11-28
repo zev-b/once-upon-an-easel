@@ -33,7 +33,13 @@ export default function GalleryHome() {
                         <span>Artist: {art.user.firstName} {art.user.lastName}</span>
                         <span> Title: {art.title}</span>
                              <div className="art-tags">
-                                 <div>Tags here</div>
+                                 {Object.values(art.tags).map((tag) => (
+                                    <div
+                                    key={tag.id}
+                                    >
+                                        {tag.name}
+                                    </div>
+                                 ))}
                              </div>
                          </div>
                     </div>

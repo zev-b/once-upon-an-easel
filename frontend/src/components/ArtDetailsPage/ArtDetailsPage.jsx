@@ -38,6 +38,15 @@ export default function ArtDetailsPage() {
             <div className="artist-name">
                 Artist: {art.user.firstName} {art.user.lastName}
             </div>
+            <div className="art-tags">
+                {Object.values(art.tags).map((tag) => (
+                <div
+                key={tag.id}
+                >
+                {tag.name}
+                </div>
+                ))}
+            </div>
             <div className="description">
                 {art.description}
             </div>
