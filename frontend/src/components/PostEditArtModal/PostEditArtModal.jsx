@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { useEffect, useState } from "react";
 import { createArtThunk } from "../../store/art";
+import { updateArtThunk } from "../../store/art";
 import './PostEditArtModal.css';
 
 export default function PostEditArtModal({ art, isEditing = false }) {
@@ -28,18 +29,29 @@ export default function PostEditArtModal({ art, isEditing = false }) {
             setTitle(art.title);
             setDescription(art.description);
             setPreviewUrl(art.imageId);
+            console.log(art.imageId)
             setShowUpload(false);
         }
     }, [art, isEditing]);
 
     useEffect(() => {
-        setButtonDisabled(
-            !imageFile ||
-            title.length > 50 ||
-            description.length > 315 ||
-            Object.keys(errors).some((key) => errors[key])
-        );
-    }, [imageFile, title, description, errors]);
+        if (isEditing) {
+            setButtonDisabled(
+                title.length > 50 ||
+                description.length > 315 ||
+                Object.keys(errors).some((key) => errors[key])
+            )
+        } else {
+            setButtonDisabled(
+                !imageFile ||
+                title.length > 50 ||
+                description.length > 315 ||
+                Object.keys(errors).some((key) => errors[key])
+            );
+        }
+        // console.log(`= Btn disabld? =`,Object.keys(errors).some((key) => errors[key]));
+        // console.log(`= isEditing? =`, isEditing, art)
+    }, [imageFile, title, description, errors, isEditing]);
 
     const uploadImage = async (e) => {
         const file = e.target.files[0];
@@ -69,7 +81,7 @@ export default function PostEditArtModal({ art, isEditing = false }) {
 
         if (title.length > 50) validationErrors.title = "Title must not exceed 50 characters.";
         if (description.length > 315) validationErrors.description = "Description must not exceed 315 characters.";
-        if (!imageFile) validationErrors.image = "An image is required.";
+        if (!(imageFile || isEditing)) validationErrors.image = "An image is required.";
 
         if (Object.keys(validationErrors).length) {
             setErrors(validationErrors);
@@ -81,12 +93,14 @@ export default function PostEditArtModal({ art, isEditing = false }) {
 
         try {
             if (isEditing) {
+                const form = { title, description };
                 await dispatch(updateArtThunk(art.id, form));
             } else {
                 await dispatch(createArtThunk(user.id, form));
             }
                 closeModal();
         } catch (res) {
+            // console.log(`RES =>`,res)
             const data = await res.json();
             if (data && data.errors) {
                 setErrors(data.errors);

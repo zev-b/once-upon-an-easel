@@ -4,6 +4,7 @@ const LOAD_ART = 'art/loadArt';
 const LOAD_USER_ART = 'art/loadUserArt';
 const LOAD_ART_DETAILS = 'art/loadArtDetails';
 const CREATE_ART = 'art/createArt';
+const UPDATE_ART = 'art/updateArt';
 // const LOAD_TAGS = '';
 // const CREATE_TAG = '';
 
@@ -15,7 +16,7 @@ const normalizeArt = (data) => {
   }, {});
 };
 
-const loadArt = (art) => ({
+export const loadArt = (art) => ({
   type: LOAD_ART,
   art: normalizeArt(art),
 });
@@ -27,13 +28,18 @@ export const loadArtDetails = (art) => ({
 
 export const loadUserArt = (art) => ({
   type: LOAD_USER_ART,
-  art
+  art: normalizeArt(art)
 });
 
-const createArt = (artPiece) => ({
+export const createArt = (artPiece) => ({
   type: CREATE_ART,
   artPiece,
 });
+
+export const updateArt = (artPiece) => ({
+  type: UPDATE_ART,
+  artPiece,
+})
 
 //# GET all art 
 //! TODO: handle passing in filters to backend route when present...
@@ -52,12 +58,12 @@ export const fetchArtThunk = (filters) => async (dispatch) => {
   }
 }
 
-//# GET user's art (manage-art) 
+//# GET User's art (manage-art) 
 export const fetchUserArtThunk = () => async (dispatch) => {
   const response = await csrfFetch('/api/art-pieces/current');
   if (response.ok) {
       const data = await response.json();
-      dispatch(loadUserArt(data.artPieces)) // |.Art|.artPieces ?
+      dispatch(loadUserArt(data)) // |.Art|.artPieces ?
   }
 };
 
@@ -76,39 +82,56 @@ export const fetchArtDetails = (artId) => async (dispatch) => {
 //# POST
 export const createArtThunk = (userId, form) => async (dispatch) => {
   const { image, title, description } = form;
-  // try {
-    const formData = new FormData();
+  const formData = new FormData();
 
-    formData.append('userId', userId);
-    formData.append('title', title);
-    formData.append('description', description);
-    formData.append('image', image);
+  formData.append('userId', userId);
+  formData.append('title', title);
+  formData.append('description', description);
+  formData.append('image', image);
 
-    const options = {
-      method: "POST",
-      headers: { 'Content-Type': 'multipart/form-data' },
-      body: formData
+  const options = {
+    method: "POST",
+    headers: { 'Content-Type': 'multipart/form-data' },
+    body: formData
+  }
+
+  const res = await csrfFetch('/api/art-pieces', options);
+
+  if (res.ok) {
+    const artPiece = await res.json();
+    dispatch(createArt(artPiece));
+
+  } else if (res.status < 500) {
+    const data = await res.json();
+
+    if (data.errors) return data
+
+    throw res;
+  }
+
+  return res;
+};
+
+//# PUT
+export const updateArtThunk = (artId, form) => async (dispatch) => { 
+  const res = await csrfFetch(`/api/art-pieces/${artId}`, {
+    method: 'PUT',
+    body: JSON.stringify(form),
+  });
+
+  if (res.ok) {
+    const updatedArtPiece = await res.json();
+    dispatch(updateArt(updatedArtPiece));
+  } else if (res.status < 500) {
+    const data = await res.json();
+    if (data.errors) {
+      return data;
     }
+  } else {
+    throw res;
+  }
 
-    const res = await csrfFetch('/api/art-pieces', options);
-  
-    if (res.ok) {
-      const artPiece = await res.json();
-      dispatch(createArt(artPiece));
-
-    } else if (res.status < 500) {
-      const data = await res.json();
-
-      if (data.errors) return data
-
-      throw new Error('Failed to upload art piece');
-    }
-
-    return res;
-  // } catch (error) {
-  //   console.log(`==Thunk error==`, error);
-  //   return error
-  // }
+  return res;
 };
 
 const initialState = {
@@ -125,44 +148,9 @@ export const artReducer = (state = initialState, action) => {
     case LOAD_ART_DETAILS: 
       return { ...state, artDetails: action.art };
     case CREATE_ART:
-      return { ...state, [action.artPiece.id]: action.artPiece };
+    case UPDATE_ART:
+      return { ...state, allArt: { ...state.allArt, [action.artPiece.id]: action.artPiece } };
     default:
       return state;
   }
 };
-
-//* ===============================================================
-// export const uploadArtImage = (form) => async (dispatch) => {
-//     try {
-//         const formData = new FormData();
-//         formData.append('image', form.image); // key for backend route
-
-//         const response = await csrfFetch('/api/art-pieces', {
-//             method: 'POST',
-//             body: formData,
-//         });
-
-//         if (response.ok) {
-//             const { imageUrl } = await response.json();
-//             dispatch(setUploadedImage(imageUrl));
-//             return imageUrl;
-//         }
-//     } catch (error) {
-//         console.error('Image upload failed:', error);
-//         throw error;
-//     }
-// };
-
-// const setUploadedImage = (imageUrl) => ({
-//     type: 'SET_UPLOADED_IMAGE',
-//     payload: imageUrl,
-// });
-
-// export const artReducer = (state = {}, action) => {
-//     switch (action.type) {
-//         case 'SET_UPLOADED_IMAGE':
-//             return { ...state, uploadedImage: action.payload };
-//         default:
-//             return state;
-//     }
-// };

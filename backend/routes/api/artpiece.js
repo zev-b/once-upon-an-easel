@@ -284,8 +284,8 @@ router.post('/', singleMulterUpload('image'), validateArtPiece, restoreUser, req
     }
 });
 
-//# PUT art img-upload with S3 
-router.put('/:artId', singleMulterUpload('image'), validateArtPiece, restoreUser, requireAuth, async (req, res, next) => {
+//# PUT updating title and description only 
+router.put('/:artId', validateArtPiece, restoreUser, requireAuth, async (req, res, next) => {
 
     const { title, description } = req.body;
     const userId = req.user.id;
@@ -315,21 +315,15 @@ router.put('/:artId', singleMulterUpload('image'), validateArtPiece, restoreUser
         return res.status(403).json({ message: "Art must belong to user" })
     }
 
-    let imageUrl;
-
     try {
-       if (req.file) {
-           imageUrl = await singlePublicFileUpload(req.file);
-       }
-  
-       artById = await ArtPiece.update({
+       artById = await artById.update({
             userId: req.user.id,
             title,
             description,
-            imageId: imageUrl,
+            imageId: artById.imageId,
        });
 
-       res.status(200).json(updatedArt);
+       res.status(200).json(artById);
     } catch (error) {
         next(error)
     }
