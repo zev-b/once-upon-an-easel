@@ -6,7 +6,7 @@
   overflow: hidden; 
   white-space: nowrap;
   width: fit-content; 
-  animation: typing 4s steps(40, end) 10s infinite; /* try to get 10s delay to work*/
+  animation: typing 10s steps(70, end) infinite;
   animation-iteration-count: infinite; 
 }
 
@@ -18,7 +18,7 @@
     0% {
       width: 0;
     }
-    100% {
+    35% {
       width: 100%;
     }
 }
