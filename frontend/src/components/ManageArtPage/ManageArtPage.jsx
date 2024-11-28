@@ -46,6 +46,15 @@ export default function ManageArtPage() {
                 <div className='art-card-header'>
 
                 <h3>{art.title}</h3>
+                <div className="art-tags">
+                    {Object.values(art.tags).map((tag) => (
+                    <div
+                    key={tag.id}
+                    >
+                        {tag.name}
+                    </div>
+                    ))}
+                </div>
               </div>
                 <OpenModalButton
                     buttonText={<LiaEdit />}
