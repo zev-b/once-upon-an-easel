@@ -1,5 +1,7 @@
 import { csrfFetch } from './csrf';
 
+
+const CLEAR_ART_STATE = 'art/clearArtState';
 const LOAD_ART = 'art/loadArt';
 const LOAD_USER_ART = 'art/loadUserArt';
 const LOAD_ART_DETAILS = 'art/loadArtDetails';
@@ -15,6 +17,10 @@ const normalizeArt = (data) => {
     return collection;
   }, {});
 };
+
+export const clearArtState = () => ({
+  type: CLEAR_ART_STATE
+})
 
 export const loadArt = (art) => ({
   type: LOAD_ART,
@@ -142,6 +148,8 @@ const initialState = {
 
 export const artReducer = (state = initialState, action) => {
   switch (action.type) {
+    case CLEAR_ART_STATE:
+      return { ...state, allArt: {} }
     case LOAD_ART:
     case LOAD_USER_ART:
       return { ...state, allArt: { ...state.allArt, ...action.art } };
