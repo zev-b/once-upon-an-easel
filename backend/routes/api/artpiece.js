@@ -439,7 +439,7 @@ router.put('/:artId/tags/:tagId', validateTag, restoreUser, requireAuth, async (
             });
 
             if (!created) {
-                // If the new tag already exists, ensure no duplicate associations
+                // If the new tag already exists, ensure no duplicate pairs
                 const existingAssociation = await ArtTag.findOne({ where: { artId, tagId: newTag.id } });
                 if (existingAssociation) {
                     return res.status(400).json({ message: "The art piece already has this tag." });
@@ -474,7 +474,7 @@ router.delete('/:artId/tags/:tagId', restoreUser, requireAuth, async (req, res, 
 
         await artTag.destroy();
 
-        // Check if the tag is still associated with any art
+        // Check if the tag is paired to other art
         const remainingAssociations = await ArtTag.count({ where: { tagId } });
 
         if (remainingAssociations === 0) {
