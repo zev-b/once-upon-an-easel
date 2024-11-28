@@ -110,7 +110,7 @@ export default function PostEditArtModal({ art, isEditing = false }) {
     
     return (
         <div>
-        <h1>{isEditing ? "Edit Art" : "Post Art"}</h1>
+        <h1>{isEditing ? "Edit title or description" : "Post Art"}</h1>
         <form onSubmit={handleSubmit}>
           <div>
               <input 
