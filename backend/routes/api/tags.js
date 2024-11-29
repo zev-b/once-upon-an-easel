@@ -12,7 +12,7 @@ const router = express.Router();
 router.get('/', async (req, res, next) => {
     try {
         const tags = await Tag.findAll();
-        res.json(tags);
+        res.status(200).res.json(tags);
     } catch (error) {
         next(error);
     }

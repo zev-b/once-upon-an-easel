@@ -458,22 +458,17 @@ router.put('/:artId/tags/:tagId', validateTag, restoreUser, requireAuth, checkAr
         const artTagCount = await ArtTag.count({ where: { tagId } });
 
         if (artTagCount > 1) {
-            // when other art have the tag, create a new tag with new name
-            const [newTag, created] = await Tag.findOrCreate({
-                where: { name: formattedTagName },
-                defaults: { name: formattedTagName }
+            // when other art uses this tag, create a new tag with new name
+
+            const newTag = await Tag.Create({
+                name: formattedTagName 
             });
 
-            if (!created) {
-                // If the new tag already exists, ensure no duplicate pairs
-                const existingAssociation = await ArtTag.findOne({ where: { artId, tagId: newTag.id } });
-                if (existingAssociation) {
-                    return res.status(400).json({ message: "The art piece already has this tag." });
-                }
-            }
-
-            await ArtTag.destroy({ where: { artId, tagId } }); // destroy old pair on join
-            await ArtTag.create({ artId, tagId: newTag.id }); // create new pair on join
+            // destroy old pair on join
+            await ArtTag.destroy({ where: { artId, tagId } }); 
+            
+            // then create new pair on join with new tag's id
+            await ArtTag.create({ artId, tagId: newTag.id }); 
 
             return res.status(201).json(newTag);
         }
@@ -512,7 +507,7 @@ router.delete('/:artId/tags/:tagId', restoreUser, requireAuth, checkArtOwner, as
             await tag.destroy();
         }
 
-        res.status(200).json({ message: "Tag successfully removed." });
+        res.status(200).json({ message: "Tag deleted successfully." });
     } catch (error) {
         next(error);
     }

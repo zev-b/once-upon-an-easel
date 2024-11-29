@@ -20,7 +20,6 @@ module.exports = (sequelize, DataTypes) => {
       
       // Column: id... 
       // -> setup ref for "artId" on artTags, userFavorites, userBids, comments, artCollections
-      
       // ArtPiece.hasMany
       // ArtPiece.hasMany
       // ArtPiece.hasMany

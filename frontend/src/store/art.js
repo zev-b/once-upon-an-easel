@@ -208,18 +208,52 @@ export const fetchTagsThunk = () => async (dispatch) => {
 }
 
 //# POST tag
-export const createTagThunk = () => async (dispatch) => {
+export const createTagThunk = (artId, tagName) => async (dispatch) => {
+  const res = await csrfFetch(`/api/art-pieces/${artId}/tags`, {
+    method: 'POST',
+    body: JSON.stringify({ name: tagName }),
+  });
 
+  if (res.ok) {
+    const newTag = await res.json();
+    dispatch(createTag(newTag));
+    return newTag;
+  } else {
+    const error = await res.json();
+    return error;
+  }
 }
 
 //# PUT tag 
-export const updateTagThunk = () => async (dispatch) => {
+export const updateTagThunk = (tagId, newName) => async (dispatch) => {
+  const res = await csrfFetch(`/api/tags/${tagId}`, {
+    method: 'PUT',
+    body: JSON.stringify({ name: newName }),
+  });
 
+  if (res.ok) {
+    const updatedTag = await res.json();
+    dispatch(updateTag(updatedTag));
+    return updatedTag;
+  } else {
+    const error = await res.json();
+    return error;
+  }
 }
 
 //# DELETE tag
 export const deleteTagThunk = () => async (dispatch) => {
+  const res = await csrfFetch(`/api/tags/${tagId}`, {
+    method: 'DELETE',
+  });
 
+  if (res.ok) {
+    dispatch(deleteTag(tagId));
+    return { message: 'Tag deleted successfully' };
+  } else {
+    const error = await res.json();
+    return error;
+  }
 }
 
 const initialState = {
@@ -244,7 +278,24 @@ export const artReducer = (state = initialState, action) => {
       return { 
         ...state,
         allArt: Object.fromEntries(Object.entries(state.allArt).filter(([ id ]) => id != action.artId))
-       }
+       };
+    //# ------------- TAGS --------------
+    case LOAD_TAGS:
+      return { ...state, tags: { ...action.tags } };
+    case CREATE_TAG:
+      return {
+        ...state,
+        tags: { ...state.tags, [action.tag.id]: action.tag },
+      };
+    case UPDATE_TAG:
+      return {
+        ...state,
+        tags: { ...state.tags, [action.tag.id]: action.tag },
+      };
+    case DELETE_TAG:
+      const newTags = { ...state.tags };
+      delete newTags[action.tagId];
+      return { ...state, tags: newTags };
     default:
       return state;
   }
