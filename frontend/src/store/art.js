@@ -91,7 +91,7 @@ export const fetchArtThunk = (filters) => async (dispatch) => {
   if (res.ok) {
     const data = await res.json();
 
-    console.log('\n=== data ===\n', data);
+    // console.log('\n=== data ===\n', data);
 
     dispatch(loadArt(data)); //^ Splash only uses .artPieces, Gallery needs all info
     return data.artPieces;
@@ -278,6 +278,7 @@ export const artReducer = (state = initialState, action) => {
       return { 
         ...state,
         allArt: Object.fromEntries(Object.entries(state.allArt).filter(([ id ]) => id != action.artId))
+        // Deleting tags logic?
        };
     //# ------------- TAGS --------------
     case LOAD_TAGS:

@@ -330,7 +330,9 @@ router.put('/:artId', validateArtPiece, restoreUser, requireAuth, async (req, re
 router.delete('/:artId', restoreUser, requireAuth, async (req, res, next) => {
     const userId = req.user.id;
 
-    let artById = await ArtPiece.findByPk(req.params.artId);
+    const { artId } = req.params;
+
+    let artById = await ArtPiece.findByPk(artId);
 
     if (!artById) {
         return res.status(404).json({ message: "Art couldn't be found" })
@@ -341,7 +343,15 @@ router.delete('/:artId', restoreUser, requireAuth, async (req, res, next) => {
     }
 
     try {
-       await artById.destroy();
+        
+        const artTags = await ArtTag.findAll({ where: { artId } });
+    //    grab the tag id(s) from this var, then check the join against this tagId to determine if there are any orphaned tag(s) or other art uses these tag(s)...
+
+    // ...if no other art uses: destroy these tags from the tags tbl
+
+    // ...if other art uses tags, only destroy pairs from join with this art id
+
+    await artById.destroy();
 
        res.status(200).json({ message: "Successfully deleted" });
     } catch (error) {
