@@ -17,7 +17,7 @@ export default function GalleryHome() {
     const handleTileClick = (artId) => {
         navigate(`/art-pieces/${artId}`);
     };
-
+ 
     return (
         <div className="art-list">
             {Object.values(allArt).map((art) => (
