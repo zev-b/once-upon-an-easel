@@ -16,6 +16,7 @@ module.exports = {
           key: 'id',
         },
         onDelete: 'CASCADE',
+        // onUpdate: 'CASCADE',
         allowNull: false,
         primaryKey: true,
       },
@@ -26,6 +27,7 @@ module.exports = {
           key: 'id',
         },
         onDelete: 'CASCADE',
+        // onUpdate: 'CASCADE',
         allowNull: false,
         primaryKey: true,
       }

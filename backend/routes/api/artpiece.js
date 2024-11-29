@@ -349,8 +349,30 @@ router.delete('/:artId', restoreUser, requireAuth, async (req, res, next) => {
     }
 });
 
-//# ========= TAGS ===========
+//# ==================== TAGS ======================
 
+//* Middleware for only allowing art-owner tag modifications
+const checkArtOwner = async (req, res, next) => {
+    const { artId } = req.params;
+
+    try {
+        const artPiece = await ArtPiece.findByPk(artId);
+
+        if (!artPiece) {
+            return res.status(404).json({ message: "Art piece not found." });
+        }
+
+        if (artPiece.userId !== req.user.id) {
+            return res.status(403).json({ message: "You are not authorized to modify tags for this art piece." });
+        }
+
+        next();
+    } catch (error) {
+        next(error);
+    }
+};
+
+//* Express Validator for Tag
 const validateTag = [
     check('tagName')
         .trim()
@@ -360,7 +382,7 @@ const validateTag = [
 ];
 
 //# POST tag
-router.post('/:artId/tags', validateTag, restoreUser, requireAuth, async (req, res, next) => {
+router.post('/:artId/tags', validateTag, restoreUser, requireAuth, checkArtOwner, async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         const errorArray = errors.array();
@@ -402,7 +424,7 @@ router.post('/:artId/tags', validateTag, restoreUser, requireAuth, async (req, r
 });
 
 //# PUT tag(s)
-router.put('/:artId/tags/:tagId', validateTag, restoreUser, requireAuth, async (req, res, next) => {
+router.put('/:artId/tags/:tagId', validateTag, restoreUser, requireAuth, checkArtOwner, async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         const errorArray = errors.array();
@@ -423,7 +445,11 @@ router.put('/:artId/tags/:tagId', validateTag, restoreUser, requireAuth, async (
     try {
         const formattedTagName = tagName.toLowerCase().replace(/\s+/g, '-');
 
-        let tag = await Tag.findByPk(tagId);
+        let tag = await Tag.findByPk({
+            where: {
+                id: tagId
+            }
+        });
 
         if (!tag) {
             return res.status(404).json({ message: "Tag not found." });
@@ -462,7 +488,7 @@ router.put('/:artId/tags/:tagId', validateTag, restoreUser, requireAuth, async (
 });
 
 //# DELETE tag(s)
-router.delete('/:artId/tags/:tagId', restoreUser, requireAuth, async (req, res, next) => {
+router.delete('/:artId/tags/:tagId', restoreUser, requireAuth, checkArtOwner, async (req, res, next) => {
     const { artId, tagId } = req.params;
 
     try {
@@ -478,7 +504,11 @@ router.delete('/:artId/tags/:tagId', restoreUser, requireAuth, async (req, res, 
         const remainingAssociations = await ArtTag.count({ where: { tagId } });
 
         if (remainingAssociations === 0) {
-            const tag = await Tag.findByPk(tagId);
+            const tag = await Tag.findByPk({
+                where: {
+                    id: tagId
+                }
+            });
             await tag.destroy();
         }
 

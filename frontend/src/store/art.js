@@ -7,8 +7,11 @@ const LOAD_ART_DETAILS = 'art/loadArtDetails';
 const CREATE_ART = 'art/createArt';
 const UPDATE_ART = 'art/updateArt';
 const DELETE_ART = 'art/deleteArt';
-// const LOAD_TAGS = '';
-// const CREATE_TAG = '';
+
+const LOAD_TAGS = 'art/loadTags';
+const CREATE_TAG = 'art/createTag';
+const UPDATE_TAG = 'art/updateTag';
+const DELETE_TAG = 'art/deleteTag';
 
 const normalizeArt = (data) => {
   let artPieces = data.artPieces;
@@ -45,12 +48,40 @@ export const createArt = (artPiece) => ({
 export const updateArt = (artPiece) => ({
   type: UPDATE_ART,
   artPiece,
-})
+});
 
 export const deleteArt = (artId) => ({
   type: DELETE_ART,
   artId
-})
+});
+
+const normalizeTags = (tags) => {
+  return tags.reduce((collection, tag) => {
+    collection[tag.id] = tag;
+    return collection;
+  }, {});
+};
+
+export const loadTags = (tags) => ({
+  type: LOAD_TAGS,
+  tags: normalizeTags(tags),
+});
+
+export const createTag = (tag) => ({
+  type: CREATE_TAG,
+  tag,
+});
+
+export const updateTag = (tag) => ({
+  type: UPDATE_TAG,
+  tag,
+});
+
+export const deleteTag = (tagId) => ({
+  type: DELETE_TAG,
+  tagId,
+});
+
 
 //# GET all art 
 //! TODO: handle passing in filters to backend route when present...
@@ -90,7 +121,7 @@ export const fetchArtDetails = (artId) => async (dispatch) => {
   }
 }
 
-//# POST
+//# POST art
 export const createArtThunk = (userId, form) => async (dispatch) => {
   const { image, title, description } = form;
   const formData = new FormData();
@@ -123,7 +154,7 @@ export const createArtThunk = (userId, form) => async (dispatch) => {
   return res;
 };
 
-//# PUT
+//# PUT art
 export const updateArtThunk = (artId, form) => async (dispatch) => { 
   const res = await csrfFetch(`/api/art-pieces/${artId}`, {
     method: 'PUT',
@@ -145,7 +176,7 @@ export const updateArtThunk = (artId, form) => async (dispatch) => {
   return res;
 };
 
-//# DELETE 
+//# DELETE art
 export const deleteArtThunk = (artId) => async (dispatch) => {
   const res = await csrfFetch(`/api/art-pieces/${artId}`, {
     method: 'DELETE'
@@ -161,6 +192,34 @@ export const deleteArtThunk = (artId) => async (dispatch) => {
   } else {
     throw res;
   }
+}
+
+//# GET all tags for Nav
+export const fetchTagsThunk = () => async (dispatch) => {
+  const res = await csrfFetch('/api/tags');
+
+  if (res.ok) {
+    const tags = await res.json();
+    dispatch(loadTags(tags));
+    return tags;
+  } else {
+    console.error("Failed to fetch tags");
+  }
+}
+
+//# POST tag
+export const createTagThunk = () => async (dispatch) => {
+
+}
+
+//# PUT tag 
+export const updateTagThunk = () => async (dispatch) => {
+
+}
+
+//# DELETE tag
+export const deleteTagThunk = () => async (dispatch) => {
+
 }
 
 const initialState = {

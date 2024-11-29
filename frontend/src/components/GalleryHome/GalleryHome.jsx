@@ -30,8 +30,8 @@ export default function GalleryHome() {
                 <img src={art.imageId}alt={`${art.title} -Image`} className="art-image" /> 
                 <div className="art-info">
                      <div className="art-details-info">
-                        <span>Artist: {art.user.firstName} {art.user.lastName}</span>
                         <span> Title: {art.title}</span>
+                        <span>Artist: {art.user.firstName} {art.user.lastName}</span>
                              <div className="art-tags">
                                  {Object.values(art.tags).map((tag) => (
                                     <div
