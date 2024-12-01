@@ -17,6 +17,7 @@ export default function ManageArtPage() {
 
     const user = useSelector(state => state.session.user);
     const allArt = useSelector(state => state.art.allArt);
+    const tags = useSelector(state => state.art.tags)
 
     const [userArt, setUserArt] = useState([]);
 
@@ -47,13 +48,11 @@ export default function ManageArtPage() {
 
                 <h3>{art.title}</h3>
                 <div className="art-tags">
-                    {Object.values(art.tags).map((tag) => (
-                    <div
-                    key={tag.id}
-                    >
-                        {tag.name}
-                    </div>
-                    ))}
+                {Object.values(tags).filter((tag) => art.tags.includes(tag.id)).map((tag) => (
+                <div key={tag.id} >
+                    {tag.name}
+                </div>
+                ))}
                 </div>
               </div>
                 <OpenModalButton

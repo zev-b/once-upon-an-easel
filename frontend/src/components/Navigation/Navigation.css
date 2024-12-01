@@ -21,6 +21,37 @@
     padding: 8px 16px;
 }
 
+.tags-list {
+    width: min-content;
+    display: flex;
+    gap: 6px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    list-style: none;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    /* padding: 4px 0; */
+
+    &::-webkit-scrollbar {
+        height: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #adaaaa;
+        border-radius: 15px;
+    }
+
+    > .tag {
+        font-size: 15px;
+        padding: 1px 9px;
+        border: 1px solid #555;
+        border-radius: 12px;
+        color: white;
+        background-color: transparent;
+        white-space: nowrap;
+    }
+}
+
 /*//! ==== OpenModalItem == TODO: NEST styles so dropdown doesnt conflict with navbar items*/
 li {
     padding: 10px;

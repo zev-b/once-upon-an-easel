@@ -39,13 +39,11 @@ export default function ArtDetailsPage() {
                 Artist: {art.user.firstName} {art.user.lastName}
             </div>
             <div className="art-tags">
-                {Object.values(art.tags).map((tag) => (
-                <div
-                key={tag.id}
-                >
-                {tag.name}
+            {Object.values(tags).filter((tag) => art.tags.includes(tag.id)).map((tag) => (
+                <div key={tag.id} >
+                    {tag.name}
                 </div>
-                ))}
+            ))}
             </div>
             <div className="description">
                 {art.description}

@@ -77,9 +77,9 @@ export const updateTag = (tag) => ({
   tag,
 });
 
-export const deleteTag = (tagId) => ({
+export const deleteTag = (artId, tagId) => ({
   type: DELETE_TAG,
-  tagId,
+  tagId, artId
 });
 
 
@@ -225,8 +225,8 @@ export const createTagThunk = (artId, tagName) => async (dispatch) => {
 }
 
 //# PUT tag 
-export const updateTagThunk = (tagId, newName) => async (dispatch) => {
-  const res = await csrfFetch(`/api/tags/${tagId}`, {
+export const updateTagThunk = (artId, tagId, newName) => async (dispatch) => {
+  const res = await csrfFetch(`/api/art-pieces/${artId}/tags/${tagId}`, {
     method: 'PUT',
     body: JSON.stringify({ name: newName }),
   });
@@ -242,8 +242,8 @@ export const updateTagThunk = (tagId, newName) => async (dispatch) => {
 }
 
 //# DELETE tag
-export const deleteTagThunk = () => async (dispatch) => {
-  const res = await csrfFetch(`/api/tags/${tagId}`, {
+export const deleteTagThunk = (artId, tagId) => async (dispatch) => {
+  const res = await csrfFetch(`/api/art-pieces/${artId}/tags/${tagId}`, {
     method: 'DELETE',
   });
 
@@ -274,12 +274,29 @@ export const artReducer = (state = initialState, action) => {
     case CREATE_ART:
     case UPDATE_ART:
       return { ...state, allArt: { ...state.allArt, [action.artPiece.id]: action.artPiece } };
-    case DELETE_ART: 
-      return { 
-        ...state,
-        allArt: Object.fromEntries(Object.entries(state.allArt).filter(([ id ]) => id != action.artId))
-        // Deleting tags logic?
-       };
+
+    case DELETE_ART: {
+      const { artId } = action;
+      //* 1. copy state
+      const stateCopy = { ...state, allArt: { ...state.allArt }, tags: { ...state.tags } };
+      //* 2. check if tags
+      const deletedArtTags = stateCopy.allArt[artId]?.tags || [];
+      //* 3. delete art
+      delete stateCopy.allArt[artId];
+      //* 4. check if tags used elsewhere
+      deletedArtTags.forEach((tagId) => {
+        const tagUsedElsewhere = Object.values(stateCopy.allArt).some((art) => art.tags?.includes(tagId)
+        );
+
+        //* 5. if NOT, delete tag in state
+        if (!tagUsedElsewhere) {
+          delete stateCopy.tags[tagId];
+        }
+      });
+
+      //* 6. Otherwise return state
+        return stateCopy
+    }
     //# ------------- TAGS --------------
     case LOAD_TAGS:
       return { ...state, tags: { ...action.tags } };
@@ -293,10 +310,26 @@ export const artReducer = (state = initialState, action) => {
         ...state,
         tags: { ...state.tags, [action.tag.id]: action.tag },
       };
-    case DELETE_TAG:
-      const newTags = { ...state.tags };
-      delete newTags[action.tagId];
-      return { ...state, tags: newTags };
+
+    case DELETE_TAG: {
+      const { tagId, artId } = action;
+      //* 1. copy state
+      const stateCopy = { ...state, allArt: { ...state.allArt }, tags: { ...state.tags } };
+      //* 2. Remove tag from the art's tagIds array
+      if (stateCopy.allArt[artId]?.tags) {
+        stateCopy.allArt[artId].tags = stateCopy.allArt[artId].filter((id) => id !== tagId);
+      }
+      //* 3. check if tags used elsewhere
+      const tagUsedElsewhere = Object.values(stateCopy.allArt).some((art) => art.tags?.includes(tagId));
+
+      //* 4. if NOT, delete tag in state
+      if (!tagUsedElsewhere) {
+        delete stateCopy.tags[tagId];
+      }
+
+      //* 5. Otherwise return state
+      return stateCopy
+    }
     default:
       return state;
   }

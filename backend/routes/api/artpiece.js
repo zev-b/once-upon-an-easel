@@ -83,7 +83,6 @@ router.get('/', async (req, res, next) => {
             ],
         });
         
-        // response
         const result = {
             // page: page || 1,
             // size: limit,
@@ -101,10 +100,7 @@ router.get('/', async (req, res, next) => {
                 available: art.available,
                 createdAt: art.createdAt,
                 updatedAt: art.updatedAt,
-                tags: art.Tags.map((tag) => ({
-                    id: tag.id,
-                    name: tag.name
-                })),
+                tags: art.Tags.map((tag) => tag.id),
             })),
         };
 
@@ -140,10 +136,7 @@ router.get('/current',restoreUser, requireAuth, async (req, res, next) => {
             available: art.available,
             createdAt: art.createdAt,
             updatedAt: art.updatedAt,
-            tags: art.Tags.map((tag) => ({
-                id: tag.id,
-                name: tag.name,
-            })),
+            tags: art.Tags.map((tag) => tag.id),
         }));
 
         res.status(200).json({ artPieces: result });
@@ -187,10 +180,7 @@ router.get('/:artId',restoreUser, requireAuth, async (req, res, next) => {
             available: artById.available,
             createdAt: artById.createdAt,
             updatedAt: artById.updatedAt,
-            tags: artById.Tags.map((tag) => ({
-                id: tag.id,
-                name: tag.name,
-            })),
+            tags: artById.Tags.map((tag) => tag.id),
         };
         
         res.status(200).json({ art: result });
@@ -343,15 +333,25 @@ router.delete('/:artId', restoreUser, requireAuth, async (req, res, next) => {
     }
 
     try {
-        
         const artTags = await ArtTag.findAll({ where: { artId } });
-    //    grab the tag id(s) from this var, then check the join against this tagId to determine if there are any orphaned tag(s) or other art uses these tag(s)...
+        // grab the tag id(s) from this var, then check the join against this tagId to determine if there is any orphaned tag or other art uses this tag...
+        const tagIds = artTags.map((artTag) => artTag.tagId);
 
-    // ...if no other art uses: destroy these tags from the tags tbl
+        for (const tagId of tagIds) {
+            const anyOtherTagUse = await ArtTag.findAll({ 
+                where: { tagId, artId: { [Op.ne]: artId } } 
+            });
 
-    // ...if other art uses tags, only destroy pairs from join with this art id
+            // ...if no other art uses: destroy tag from the tags tbl
+            if (anyOtherTagUse.length === 0) {
+                await Tag.destroy({ where: { id: tagId } });
+            }
+            
+            // either way...(and if other art uses tags, only) destroy pairs from join with this art id
+            await ArtTag.destroy({ where: { tagId, artId } });
+        }
 
-    await artById.destroy();
+        await artById.destroy();
 
        res.status(200).json({ message: "Successfully deleted" });
     } catch (error) {
