@@ -27,12 +27,7 @@ export default function ManageArtPage() {
     
     useEffect(() => { 
         setUserArt(Object.values(allArt).filter(art => art.userId === user?.id));
-    }, [allArt, user]);
-    
-    // const handleUpdateArt = (e, artId) => {
-    //     e.stopPropagation();
-    //     navigate(`/art-pieces/${artId}/edit`);
-    // };
+    }, [allArt, user, tags]);
 
     return (
         <div className="manage-art-container">
@@ -60,8 +55,6 @@ export default function ManageArtPage() {
                     className="edit-art-button"
                     modalComponent={<PostEditArtModal art={art} isEditing={true} />}
                 />
-
-                {/* <button className="update-art-button" onClick={(e) => handleUpdateArt(e, art.id)}><LiaEdit /></button> */}
 
                 <OpenModalButton 
                     buttonText={<RiDeleteBin6Line />} 
