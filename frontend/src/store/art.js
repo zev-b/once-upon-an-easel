@@ -85,7 +85,7 @@ export const deleteTag = (artId, tagId) => ({
 
 //# GET all art 
 //! TODO: handle passing in filters to backend route when present...
-export const fetchArtThunk = (filters) => async (dispatch) => {
+export const fetchArtThunk = () => async (dispatch) => {
   //! ...build fetch url conditionally with filters
   const res = await fetch('api/art-pieces');
   if (res.ok) {

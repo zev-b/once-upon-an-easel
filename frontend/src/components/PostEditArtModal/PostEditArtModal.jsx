@@ -61,7 +61,7 @@ export default function PostEditArtModal({ art, isEditing = false }) {
         if (file) {
             const reader = new FileReader();
             reader.readAsDataURL(file);
-            reader.onload = (e) => setPreviewUrl(reader.result);
+            reader.onload = () => setPreviewUrl(reader.result);
             setImageFile(file);
             setShowUpload(false);
             setErrors((prev) => ({ ...prev, image: null }));

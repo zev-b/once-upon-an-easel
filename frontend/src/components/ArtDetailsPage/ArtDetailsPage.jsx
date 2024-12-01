@@ -10,7 +10,7 @@ export default function ArtDetailsPage() {
 
     const art = useSelector(state => state.art.artDetails);
     const tags = useSelector(state => state.art.tags);
-    const user = useSelector(state => state.session.user);
+    // const user = useSelector(state => state.session.user);
 
     const [loaded, setLoaded] = useState(false);
 

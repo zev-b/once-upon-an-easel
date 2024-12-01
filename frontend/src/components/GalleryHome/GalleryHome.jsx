@@ -7,7 +7,7 @@ import './GalleryHome.css'
 export default function GalleryHome() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const user = useSelector(state => state.session.user);
+    // const user = useSelector(state => state.session.user);
     const allArt = useSelector(state => state.art.allArt);
     const tags = useSelector(state => state.art.tags)
 

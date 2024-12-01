@@ -1,5 +1,5 @@
 // frontend/src/components/Navigation/Navigation.jsx
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import ProfileButton from "./ProfileButton";
 import "./Navigation.css";

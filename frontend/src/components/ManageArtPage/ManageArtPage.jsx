@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserArtThunk } from "../../store/art";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import OpenModalMenuItem from "../Navigation/OpenModalItem";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import { LiaEdit } from "react-icons/lia";
