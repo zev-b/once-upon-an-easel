@@ -257,19 +257,6 @@ router.post('/', singleMulterUpload('image'), validateArtPiece, restoreUser, req
         description,
         imageId: imageUrl,
        });
-
-    //^ Deal with Tags here: -> (Nope, in a separate route)
-    //+ for each tag in the array...
-    //+ format ea tag: lowercase, trim, replace spaces with hyphens
-    // const reqTags = await Promise.all(
-    //     tags.map(async tagName => {
-    //         const [tag] = await Tag.findOrCreate({
-    //             where: { name: tagName.toLowerCase() }, // case
-    //             defaults: { name: tagName.toLowerCase() }, // Additional fields can go here
-    //         });
-    //         return tag;
-    //     })
-    // );
         // console.log("\n ===Img Url==== \n", imageUrl)
       
        res.status(201).json({ ...newArt.toJSON(), user: req.user });
@@ -299,7 +286,20 @@ router.put('/:artId', validateArtPiece, restoreUser, requireAuth, async (req, re
         return res.status(400).json({errors: normalizedErrors})
     }
 
-    let artById = await ArtPiece.findByPk(req.params.artId);
+    let artById = await ArtPiece.findOne({
+        where: { id: req.params.artId },
+        include: [
+            {
+                model: Tag,
+                attributes: ["id", "name"],
+                through: { attributes: [] },
+            },
+            {
+                model: User, 
+                attributes: ["firstName", "lastName"],
+            },
+        ],
+    });
 
     if (!artById) {
         return res.status(404).json({ message: "Art couldn't be found" })
@@ -317,7 +317,7 @@ router.put('/:artId', validateArtPiece, restoreUser, requireAuth, async (req, re
             imageId: artById.imageId,
        });
 
-       res.status(200).json(artById);
+       res.status(200).json({ ...artById.toJSON(), tags: artById.Tags.map((tag) => tag.id) });
     } catch (error) {
         next(error)
     }
@@ -462,22 +462,22 @@ router.put('/:artId/tags/:tagId', validateTag, restoreUser, requireAuth, checkAr
     try {
         const formattedTagName = tagName.toLowerCase().replace(/\s+/g, '-');
 
-        let tag = await Tag.findByPk({
-            where: {
-                id: tagId
-            }
-        });
+        let tag = await Tag.findByPk(tagId);
 
         if (!tag) {
             return res.status(404).json({ message: "Tag not found." });
+        }
+
+        if (tag.name === formattedTagName) {
+            // pretending we changed it, ("... but its what the frontend needed")
+            return res.status(200).json(tag);
         }
 
         const artTagCount = await ArtTag.count({ where: { tagId } });
 
         if (artTagCount > 1) {
             // when other art uses this tag, create a new tag with new name
-
-            const newTag = await Tag.Create({
+            const newTag = await Tag.create({
                 name: formattedTagName 
             });
 
@@ -516,11 +516,7 @@ router.delete('/:artId/tags/:tagId', restoreUser, requireAuth, checkArtOwner, as
         const remainingAssociations = await ArtTag.count({ where: { tagId } });
 
         if (remainingAssociations === 0) {
-            const tag = await Tag.findByPk({
-                where: {
-                    id: tagId
-                }
-            });
+            const tag = await Tag.findByPk(tagId);
             await tag.destroy();
         }
 

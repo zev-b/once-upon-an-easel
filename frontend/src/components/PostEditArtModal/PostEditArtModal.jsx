@@ -2,7 +2,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { useEffect, useState } from "react";
-import { createArtThunk, updateArtThunk, createTagThunk, updateTagThunk, fetchTagsThunk } from "../../store/art";
+import { createArtThunk, updateArtThunk, createTagThunk, updateTagThunk, fetchTagsThunk, deleteTagThunk } from "../../store/art";
 import './PostEditArtModal.css';
 
 export default function PostEditArtModal({ art, isEditing = false }) {
@@ -106,27 +106,38 @@ export default function PostEditArtModal({ art, isEditing = false }) {
         const form = { image, title, description };
 
         try {
-            let artId; //#(for tags)
-            if (isEditing) {
-                const form = { title, description };
-                await dispatch(updateArtThunk(art.id, form));
-                artId = art.id; //#(for tags)
-            } else {
-                const newArt = await dispatch(createArtThunk(user.id, form));
-                console.log(`NEW_ART ===>`, newArt);
-                artId = newArt.id; //#(for tags)
-            }
-
-            //* ------- TAGS --------
             const tagInputs = [label1, label2, label3];
             const currentTagIds = art?.tags || [];
-            for (let i = 0; i < tagInputs.length; i++) {
-                const label = tagInputs[i];
-                if (label) {
-                    const formattedLabel = label.toLowerCase().replace(/\s+/g, '-');
-                    if (currentTagIds[i]) {
-                        await dispatch(updateTagThunk(artId, currentTagIds[i], formattedLabel));
+            
+            let artId; //#(for tags)
+            if (isEditing) {
+                artId = art.id; //#(for tags)
+                for (let i = 0; i < tagInputs.length; i++) {
+                    const label = tagInputs[i];
+                    if (label) {
+                        const formattedLabel = label.toLowerCase().replace(/\s+/g, '-');
+                        if (currentTagIds[i]) {
+                            await dispatch(updateTagThunk(artId, currentTagIds[i], formattedLabel));
+                        } else {
+                            await dispatch(createTagThunk(artId, formattedLabel));
+                        }
                     } else {
+                        if (currentTagIds[i]) {
+                            await dispatch(deleteTagThunk(artId, currentTagIds[i]))
+                        }
+                    }
+                }
+                const form = { title, description };
+                await dispatch(updateArtThunk(art.id, form));
+            } else {
+                const newArt = await dispatch(createArtThunk(user.id, form));
+                // console.log(`NEW_ART ===>`, newArt);
+                artId = newArt.id; //#(for tags)
+                
+                for (let i = 0; i < tagInputs.length; i++) {
+                    const label = tagInputs[i];
+                    if (label) {
+                        const formattedLabel = label.toLowerCase().replace(/\s+/g, '-');
                         await dispatch(createTagThunk(artId, formattedLabel));
                     }
                 }
@@ -134,7 +145,7 @@ export default function PostEditArtModal({ art, isEditing = false }) {
             dispatch(fetchTagsThunk);
             closeModal();
         } catch (res) {
-            console.log(`RES =>`,res)
+            // console.log(`RES =>`, res);
             const data = await res.json();
             if (data && data.errors) {
                 setErrors(data.errors);

@@ -240,7 +240,7 @@ export const createTagThunk = (artId, tagName) => async (dispatch) => {
 export const updateTagThunk = (artId, tagId, newName) => async (dispatch) => {
   const res = await csrfFetch(`/api/art-pieces/${artId}/tags/${tagId}`, {
     method: 'PUT',
-    body: JSON.stringify({ name: newName }),
+    body: JSON.stringify({ tagName: newName }),
   });
 
   if (res.ok) {
@@ -348,7 +348,6 @@ export const artReducer = (state = initialState, action) => {
       if (!tagUsedElsewhere) {
         delete stateCopy.tags[tagId];
       }
-
       //* 5. Otherwise return state
       return stateCopy
     }
