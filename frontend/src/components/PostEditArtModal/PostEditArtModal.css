@@ -16,3 +16,23 @@ img {
     max-height: 30vh;
     margin: 10px 0;
 }
+
+.edit-post-form {
+    display: flex;
+    gap: 20px;
+}
+
+.inputs {
+    display: flex;
+    flex-direction: column;
+    width: 19rem;
+
+    > textarea, > input {
+        margin: 2px 0;
+    }
+}
+
+.image-and-button {
+    display: flex;
+    flex-direction: column;
+}

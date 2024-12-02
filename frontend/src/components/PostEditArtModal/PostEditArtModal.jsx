@@ -195,9 +195,9 @@ export default function PostEditArtModal({ art, isEditing = false }) {
 
     return (
         <div>
-        <h1>{isEditing ? "Edit title, description or labels" : "Post Art"}</h1>
-        <form onSubmit={handleSubmit}>
-          <div>
+        <h2>{isEditing ? "Edit title, description or labels" : "Post Art"}</h2>
+        <form onSubmit={handleSubmit} className="edit-post-form">
+          <div className="inputs">
               <input 
                   type="text"
                   value={title}
@@ -218,8 +218,7 @@ export default function PostEditArtModal({ art, isEditing = false }) {
                     {error}
                 </p>
                 ))}
-              <input 
-                  type="text"
+              <textarea
                   value={description}
                   placeholder="Description(optional)"
                   onChange={(e) => {
@@ -237,17 +236,6 @@ export default function PostEditArtModal({ art, isEditing = false }) {
                     {error}
                 </p>
                 ))}
-            {showUpload && (
-                <label htmlFor='file-upload'> Select From Computer
-                <input
-                  type='file'
-                  id='file-upload'
-                  name="image" /* was: img_url */
-                  onChange={uploadImage}
-                  accept='.jpg, .jpeg, .png, .gif'
-                  />
-                </label>
-            )}
                 <input 
                     type="text"
                     value={label1}
@@ -272,27 +260,37 @@ export default function PostEditArtModal({ art, isEditing = false }) {
                     className={labelErrors.label3 ? "error-border" : ""}
                 />
                 {labelErrors.label3 && <p className="error-message">{labelErrors.label3}</p>}
-
-            {!showUpload && (
-                <div>
+            </div>
+            <div className="image-and-button">
+            {showUpload ? (
+                <label htmlFor='file-upload'> Select From Computer
+                <input
+                  type='file'
+                  id='file-upload'
+                  name="image"
+                  onChange={uploadImage}
+                  accept='.jpg, .jpeg, .png, .gif'
+                  />
+                </label>
+            ) : (
+                <>
                 <img
                   src={previewUrl}
                   alt="preview"
                   />
                   {errors.image &&
                   (Array.isArray(errors.image) ? errors.image : [errors.image]).map((error, index) => (
-                  <p key={`title-error-${index}`} className="error-message">
+                      <p key={`title-error-${index}`} className="error-message">
                       {error}
                   </p>
                   ))}
-
                 <button
                     type="submit"
                     disabled={buttonDisabled}
-                >
+                    >
                     {isEditing ? "Save Changes" : "Post to Gallery"}
                 </button>
-              </div>
+                </>
             )}
           </div>
         </form>

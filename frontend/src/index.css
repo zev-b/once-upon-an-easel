@@ -59,12 +59,20 @@ body {
   min-width: 320px;
   min-height: 100vh; */
   /* font-family: 'Bonheur Royale', cursive; */
-  /* font-size: 1.2rem; */
+  font-size: 1rem;
 }
 
-input {
+input, textarea {
+  background-color: #10140e;
   font-size: inherit;
+  font-family: inherit;
 }
+
+textarea {
+  resize: none;
+  height: 7.5lh;
+}
+
 
 h1,
 h2,
