@@ -54,14 +54,14 @@ export default function ProfileButton({ user }) {
               <li>
               <OpenModalButton
                 buttonText="Post to Gallery"
-                onItemClick={closeMenu}
+                onButtonClick={closeMenu}
                 modalComponent={<PostEditArtModal />}
               />
               </li>
               <li>
                 <button onClick={() => {
-                        closeMenu()
-                        navigate('/art-pieces/manage-art')
+                    closeMenu()
+                    navigate('/art-pieces/manage-art')
                     }}>My Art
                     </button>
               </li>

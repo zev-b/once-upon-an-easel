@@ -42,14 +42,15 @@ export default function ManageArtPage() {
                 <div className='art-card-header'>
 
                 <h3>{art.title}</h3>
-                <div className="art-tags">
-                {Object.values(tags).filter((tag) => (art.tags ?? []).includes(tag.id)).map((tag) => (
-                <div key={tag.id} >
-                    {tag.name}
+                    <div className="art-tags">
+                    {Object.values(tags).filter((tag) => (art.tags ?? []).includes(tag.id)).map((tag) => (
+                    <div key={tag.id} >
+                        {tag.name}
+                    </div>
+                    ))}
                 </div>
-                ))}
                 </div>
-              </div>
+                <div className="control-buttons">
                 <OpenModalButton
                     buttonText={<LiaEdit />}
                     className="edit-art-button"
@@ -61,6 +62,7 @@ export default function ManageArtPage() {
                     className="delete-art-button" 
                     modalComponent={<DeleteArtModal artId={art.id}/>}
                 />
+                </div>
                 </div>
             </div>
           ))}
