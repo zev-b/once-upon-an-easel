@@ -35,4 +35,8 @@ img {
 .image-and-button {
     display: flex;
     flex-direction: column;
+
+    & input[type="file"] {
+        color: white;
+    }
 }

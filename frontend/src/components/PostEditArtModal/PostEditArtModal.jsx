@@ -220,7 +220,7 @@ export default function PostEditArtModal({ art, isEditing = false }) {
                 ))}
               <textarea
                   value={description}
-                  placeholder="Description(optional)"
+                  placeholder="Description (optional)"
                   onChange={(e) => {
                     setDescription(e.target.value);
                     setErrors((prev) => ({
@@ -239,7 +239,7 @@ export default function PostEditArtModal({ art, isEditing = false }) {
                 <input 
                     type="text"
                     value={label1}
-                    placeholder="Label #1(optional)"
+                    placeholder="Label #1 (optional)"
                     onChange={(e) => setLabel1(e.target.value)}
                     className={labelErrors.label1 ? "error-border" : ""}
                 />
@@ -247,7 +247,7 @@ export default function PostEditArtModal({ art, isEditing = false }) {
                 <input 
                     type="text"
                     value={label2}
-                    placeholder="Label #2(optional)"
+                    placeholder="Label #2 (optional)"
                     onChange={(e) => setLabel2(e.target.value)}
                     className={labelErrors.label2 ? "error-border" : ""}
                 />
@@ -255,7 +255,7 @@ export default function PostEditArtModal({ art, isEditing = false }) {
                 <input 
                     type="text"
                     value={label3}
-                    placeholder="Label #3(optional)"
+                    placeholder="Label #3 (optional)"
                     onChange={(e) => setLabel3(e.target.value)}
                     className={labelErrors.label3 ? "error-border" : ""}
                 />
