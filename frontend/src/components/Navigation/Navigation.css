@@ -50,6 +50,10 @@
         background-color: transparent;
         white-space: nowrap;
     }
+
+    > .tag.filtered {
+        border: 1px solid yellow;
+    }
 }
 
 /*//! ==== OpenModalItem == TODO: NEST styles so dropdown doesnt conflict with navbar items*/

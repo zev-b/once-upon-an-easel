@@ -10,12 +10,12 @@ export default function GalleryHome() {
     // const user = useSelector(state => state.session.user);
     const allArt = useSelector(state => state.art.allArt);
     const tags = useSelector(state => state.art.tags)
-
+    const activeFilter = useSelector(state => state.art.activeFilter);
 
     useEffect(() => {
-        dispatch(fetchArtThunk())
+        dispatch(fetchArtThunk(activeFilter ? { tagId: activeFilter } : {}))
         dispatch(fetchTagsThunk())
-    }, [dispatch]);
+    }, [dispatch, activeFilter]);
 
     const handleTileClick = (artId) => {
         navigate(`/art-pieces/${artId}`);
@@ -23,7 +23,7 @@ export default function GalleryHome() {
  
     return (
         <div className="art-list">
-            {Object.values(allArt).map((art) => (
+            {Object.values(allArt).filter((art) => activeFilter ? art.tags.includes(activeFilter) : true).map((art) => (
                 <div 
                 key={art.id}
                 className="art-tile"

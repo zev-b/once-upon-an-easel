@@ -2,6 +2,7 @@ import { csrfFetch } from './csrf';
 
 const CLEAR_ART_STATE = 'art/clearArtState';
 const LOAD_ART = 'art/loadArt';
+const SET_ACTIVE_FILTER = "art/SET_ACTIVE_FILTER";
 const LOAD_USER_ART = 'art/loadUserArt';
 const LOAD_ART_DETAILS = 'art/loadArtDetails';
 const CREATE_ART = 'art/createArt';
@@ -28,6 +29,11 @@ export const clearArtState = () => ({
 export const loadArt = (art) => ({
   type: LOAD_ART,
   art: normalizeArt(art),
+});
+
+export const setActiveFilter = (tagId) => ({
+  type: SET_ACTIVE_FILTER,
+  tagId,
 });
 
 export const loadArtDetails = (art) => ({
@@ -84,16 +90,20 @@ export const deleteTag = (artId, tagId) => ({
 
 
 //# GET all art 
-//! TODO: handle passing in filters to backend route when present...
-export const fetchArtThunk = () => async (dispatch) => {
-  //! ...build fetch url conditionally with filters
-  const res = await fetch('api/art-pieces');
+export const fetchArtThunk = (filters = {}) => async (dispatch) => {
+  const { tagId } = filters;
+  let url = "/api/art-pieces";
+
+  if (tagId) {
+    url += `?tagIds[]=${tagId}`;
+  }
+  const res = await fetch(url);
   if (res.ok) {
     const data = await res.json();
 
     // console.log('\n=== data ===\n', data);
 
-    dispatch(loadArt(data)); //^ Splash only uses .artPieces, Gallery needs all info
+    dispatch(loadArt(data));
     return data.artPieces;
   } else {
     console.error('Failed to fetch art');
@@ -105,7 +115,7 @@ export const fetchUserArtThunk = () => async (dispatch) => {
   const response = await csrfFetch('/api/art-pieces/current');
   if (response.ok) {
       const data = await response.json();
-      dispatch(loadUserArt(data)) // |.Art|.artPieces ?
+      dispatch(loadUserArt(data));
   }
 };
 
@@ -259,7 +269,8 @@ export const deleteTagThunk = (artId, tagId) => async (dispatch) => {
 const initialState = {
   allArt: {},
   artDetails: null,
-  tags: {}
+  tags: {},
+  activeFilter: null,
 };
 
 export const artReducer = (state = initialState, action) => {
@@ -269,6 +280,13 @@ export const artReducer = (state = initialState, action) => {
     case LOAD_ART:
     case LOAD_USER_ART:
       return { ...state, allArt: { ...state.allArt, ...action.art } };
+
+    case SET_ACTIVE_FILTER:
+      return {
+        ...state,
+        activeFilter: action.tagId,
+      };
+
     case LOAD_ART_DETAILS: 
       return { ...state, artDetails: action.art };
     case CREATE_ART:

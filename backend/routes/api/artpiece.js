@@ -32,18 +32,24 @@ router.get('/', async (req, res, next) => {
         // const limit = size || 20;
         // const offset = ((page || 1) - 1) * limit;
         
-
         let whereTags = {};
         if (req.query.tagIds) {
+            console.log('Received tagIds:', req.query.tagIds);
             const tagIdArray = Array.isArray(req.query.tagIds) ? req.query.tagIds.map(Number) : [Number(req.query.tagIds)];
-            where = {
-                id: {
-                    [Op.in]: tagIdArray,
-                },
+            whereTags = {
+                [Op.and]: [Sequelize.literal(`EXISTS (
+                    SELECT 1 
+                    FROM "Tags" t
+                    INNER JOIN "ArtTags" at 
+                        ON at.tagId = t.id
+                    WHERE 
+                        at.artId = "ArtPiece"."id"
+                        AND t.id IN (${tagIdArray.join(",")})
+                    )`),
+                ]
             };
         }
-        //! TODO: Add filtering options by artist first and last name
-        //! keep in mind searching with typo in *part* of name...
+        //! TODO: Add filtering by artist name
         let whereUser = {};
         if (req.query.artistName) {
             const artistName = req.query.artistName.toLowerCase();
@@ -67,11 +73,12 @@ router.get('/', async (req, res, next) => {
             // limit,
             // offset,
             distinct: true,
+            where: whereTags,
             include: [
                 {
                     model: Tag,
-                    where: whereTags,
-                    required: !!req.query.tagIds, //! converts the array to a boolean. Excludes "where"-clause, if not filtering by tags
+                    // where: whereTags,
+                    required: !!req.query.tagIds, //* converts the array to a boolean. Excludes "where"-clause, if not filtering by tags
                     attributes: ["id", "name"],
                     through: { attributes: [] },
                 },

@@ -3,7 +3,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import ProfileButton from "./ProfileButton";
 import "./Navigation.css";
-import { clearArtState, fetchTagsThunk } from "../../store/art";
+import { clearArtState, fetchArtThunk, fetchTagsThunk, setActiveFilter } from "../../store/art";
 import { useEffect, useState } from "react";
 
 export default function Navigation() {
@@ -11,6 +11,7 @@ export default function Navigation() {
     const tags = useSelector(state => state.art.tags)
     const dispatch = useDispatch();
     const location = useLocation();
+    const activeFilter = useSelector(state => state.art.activeFilter);
 
     const [isHome, setIsHome] = useState(false);
 
@@ -18,6 +19,25 @@ export default function Navigation() {
     const handleNav = () => {
         if (location.pathname !== "/art-pieces") dispatch(clearArtState())
     }
+
+    const handleTagClick = (tagId, e) => {
+        if (e.currentTarget.classList.contains("filtered")) {
+            e.currentTarget.classList.remove("filtered")
+            // dispatch(setActiveFilter(tagId));
+            clearFilter();
+        } else {
+            document.querySelectorAll(".tag.filtered").forEach((el) => el.classList.remove("filtered"));
+            e.currentTarget.classList.add("filtered")
+            dispatch(setActiveFilter(tagId));
+            dispatch(fetchArtThunk({ tagId }));
+        }
+    };
+
+    const clearFilter = () => {
+        document.querySelectorAll(".tag.filtered").forEach((el) => el.classList.remove("filtered"));
+        dispatch(setActiveFilter(null)); // reset filter
+        dispatch(fetchArtThunk()); // Fetch all art
+    };
     
     useEffect(() => {
         dispatch(fetchTagsThunk())
@@ -46,8 +66,11 @@ export default function Navigation() {
             <li>
                 <ul className="tags-list">
                     { isHome && (<li>Filter by a tag:</li>)}
+                    {isHome && activeFilter && (
+                        <button onClick={clearFilter}>Clear Filter</button>
+                    )}
                     {isHome && (Object.values(tags)?.map((tag) => (
-                        <li key={tag.id} className="tag">
+                        <li key={tag.id} className="tag" onClick={(e) => handleTagClick(tag.id, e)}>
                             {tag.name}
                         </li>
                     )))}
