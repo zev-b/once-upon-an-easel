@@ -34,7 +34,7 @@ router.get('/', async (req, res, next) => {
         
         let whereTags = {};
         if (req.query.tagIds) {
-            console.log('Received tagIds:', req.query.tagIds);
+            // console.log('Received tagIds:', req.query.tagIds);
             const tagIdArray = Array.isArray(req.query.tagIds) ? req.query.tagIds.map(Number) : [Number(req.query.tagIds)];
             whereTags = {
                 [Op.and]: [Sequelize.literal(`EXISTS (
