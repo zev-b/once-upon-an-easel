@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import * as sessionActions from '../../store/session';
 import { useNavigate } from 'react-router-dom';
+import './WelcomePage.css';
 
 export default function LoginSignupForm() {
   const dispatch = useDispatch();

@@ -12,7 +12,19 @@
         }
 
         >.delete-button-yes {
-            background-color: rgb(185, 61, 61);
+            background-color: rgb(184, 8, 8);
+
+            &:hover {
+                filter: brightness(70%)
+            }
+
+            &:active {
+                filter: brightness(50%)
+            }
+        }
+
+        >.cancel-button {
+            background-color: rgb(92, 88, 88);
 
             &:hover {
                 filter: brightness(70%)
@@ -25,6 +37,7 @@
     }
 
     >.modal-content {
+        /*//! Create border and background for modal here */
         display: flex;
         flex-direction: column;
         align-items: center;
