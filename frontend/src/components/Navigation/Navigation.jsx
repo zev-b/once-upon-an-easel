@@ -50,6 +50,7 @@ export default function Navigation() {
 
     return (
         <ul className="navbar">
+            <div className="top-of-nav-bar">
             <li className="home-button">
                 <NavLink 
                     to="/art-pieces"
@@ -63,11 +64,14 @@ export default function Navigation() {
                     <ProfileButton user={sessionUser} />
                 </li>
             )}
-            <li>
+            </div>
+            <div>
+
+            </div>
                 <ul className="tags-list">
                     { isHome && (<li>Filter by a tag:</li>)}
                     {isHome && activeFilter && (
-                        <button onClick={clearFilter}>Clear Filter</button>
+                        <button onClick={clearFilter} className="clear-filter-btn">Clear Filter</button>
                     )}
                     {isHome && (Object.values(tags)?.map((tag) => (
                         <li key={tag.id} className="tag" onClick={(e) => handleTagClick(tag.id, e)}>
@@ -75,7 +79,6 @@ export default function Navigation() {
                         </li>
                     )))}
                 </ul>
-            </li>
         </ul>
     )
 }

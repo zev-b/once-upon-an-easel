@@ -68,9 +68,10 @@ export default function ManageArtPage() {
       ) : (
         <div>
           <p>No art found. <OpenModalMenuItem
-                                    itemText="Post to the gallery instead!"
-                                    modalComponent={<PostEditArtModal />}
-                                />
+                                itemText="Post to the gallery instead!"
+                                modalComponent={<PostEditArtModal />}
+                                className="annoying-button"
+                            />
             </p>
         </div>
       )}

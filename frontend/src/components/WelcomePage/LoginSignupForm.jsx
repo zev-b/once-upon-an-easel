@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import * as sessionActions from '../../store/session';
 import { useNavigate } from 'react-router-dom';
@@ -17,11 +17,16 @@ export default function LoginSignupForm() {
   const [lastName, setLastName] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
-  const [buttonDisabled, setButtonDisabled] = useState(true);
 
   const handleLogin = (e) => {
     e.preventDefault();
-    setErrors({});
+    const loginErrors = {};
+    if (credential.length < 4) loginErrors.credential = "Credential must be 4 or more characters";
+    if (password.length < 6) loginErrors.password = "Password must be 6 or mre characters";
+  
+    setErrors(loginErrors);
+    if (Object.keys(loginErrors).length > 0) return
+
     return dispatch(sessionActions.login({ credential, password }))
       .catch(async (res) => {
         const data = await res.json();
@@ -33,6 +38,16 @@ export default function LoginSignupForm() {
 
   const handleSignup = (e) => {
     e.preventDefault();
+    const signupErrors = {};
+    if (email.length < 3 || email.length > 256) signupErrors.email = "Email must be between 3 and 256 characters";
+    if (username.length < 4 || username.length > 30) signupErrors.username = "Username must be between 4 and 30 characters";
+    if (firstName.length < 2) signupErrors.firstName = "Firstname must at least 2 characters";
+    if (lastName.length < 2) signupErrors.lastName = "Lastname must at least 2 characters";
+    if (password.length < 6) signupErrors.password = "Password must be more than 6 characters";
+
+    setErrors(signupErrors);
+    if (Object.keys(signupErrors).length > 0) return
+
     if (password === confirmPassword) {
       setErrors({});
       return dispatch(
@@ -55,17 +70,6 @@ export default function LoginSignupForm() {
     });
   };
 
-  const isDisabled = !email || 
-                     !username || 
-                     !firstName || 
-                     !lastName || 
-                     password.length < 6 || 
-                     username.length < 4;
-
-  useEffect(() => {
-    setButtonDisabled(credential.length < 4 || password.length < 6)
-  }, [credential, password])
-
   const handleDemoLogin = () => {
     return dispatch(sessionActions.login({ credential: "demo-user", password: "password" }))
       .catch(async (res) => {
@@ -77,14 +81,16 @@ export default function LoginSignupForm() {
   };
 
   const toggleForm = () => {
+    setErrors({})
     setIsLogin((prev) => !prev);
   };
 
   return (
-    <>
-    <form onSubmit={isLogin ? handleLogin : handleSignup}>
+    <div className='form-container'>
+    <form className="login-signup-form" onSubmit={isLogin ? handleLogin : handleSignup}>
         { isLogin ? ( 
           <>
+          <h2>Login</h2>
           <input
             type="text"
             value={credential}
@@ -93,12 +99,12 @@ export default function LoginSignupForm() {
             required
             />
         {errors.credential && (
-          <p>{errors.credential}</p>
+          <p className='error-message'>{errors.credential}</p>
         )}
         </>
         ) : ( 
         <> {/*//###### Signup #######*/}
-          <h1>Sign Up</h1>
+          <h2>Sign Up</h2>
           <input
             type="text"
             value={email}
@@ -106,7 +112,7 @@ export default function LoginSignupForm() {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-        {errors.email && <p>{errors.email}</p>}
+        {errors.email && <p className='error-message'>{errors.email}</p>}
           <input
             type="text"
             value={username}
@@ -114,7 +120,7 @@ export default function LoginSignupForm() {
             onChange={(e) => setUsername(e.target.value)}
             required
           />
-        {errors.username && <p>{errors.username}</p>}
+        {errors.username && <p className='error-message'>{errors.username}</p>}
           <input
             type="text"
             placeholder='First Name'
@@ -122,7 +128,7 @@ export default function LoginSignupForm() {
             onChange={(e) => setFirstName(e.target.value)}
             required
           />
-        {errors.firstName && <p>{errors.firstName}</p>}
+        {errors.firstName && <p className='error-message'>{errors.firstName}</p>}
           <input
             type="text"
             value={lastName}
@@ -130,7 +136,7 @@ export default function LoginSignupForm() {
             onChange={(e) => setLastName(e.target.value)}
             required
           />
-        {errors.lastName && <p>{errors.lastName}</p>}
+        {errors.lastName && <p className='error-message'>{errors.lastName}</p>}
         {/*//###### End Signup #######*/}
         </>
       )}
@@ -142,7 +148,7 @@ export default function LoginSignupForm() {
             required
           />
         {errors.password && (
-          <p>{errors.password}</p>
+          <p className='error-message'>{errors.password}</p>
         )}
         { !isLogin ? (
           <>  {/*//###### Signup #######*/}
@@ -154,30 +160,30 @@ export default function LoginSignupForm() {
             required
             />
         {errors.confirmPassword && (
-          <p>{errors.confirmPassword}</p>
+          <p className='error-message'>{errors.confirmPassword}</p>
         )}
         {/*//###### End Signup #######*/}
         </>  
         ) : null}
         <button 
         type="submit"
-        disabled={isLogin ? buttonDisabled : isDisabled}
         >
           Submit
         </button>
       </form>
         <button
         onClick={toggleForm}
+        className='switch-to-signup'
         >
           { isLogin ? "Don't have an account? Sign up here!" : "I have an account!" }
           </button>
       <button 
       onClick={handleDemoLogin} 
       className="demo-login-button" 
-      style={{margin: '0 auto'}}
+      // style={{margin: '0 auto'}}
       >
         Demo User Login
       </button>
-    </>
+    </div>
   );
 }

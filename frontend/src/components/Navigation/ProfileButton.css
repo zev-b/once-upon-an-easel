@@ -2,11 +2,19 @@
     display: none;
 }
 
-button {
+.p-icon {
+
+}
+
+.p-icon:hover {
+    filter: brightness(40%);    
+}
+
+/* button {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 20px; /* Pill-like button */
+    padding: 10px 20px;
     background-color: #444;
     color: #fff;
     border: none;
@@ -14,21 +22,17 @@ button {
     cursor: pointer;
     transition: background-color 0.3s ease;
     gap: 8px;
-}
+} */
 
 button:hover {
     /* background-color: #965f35; */
-}
-
-.hidden {
-    display: none;
 }
 
 ul.profile-dropdown {
     position: absolute;
     top: 50px; 
     right: 10px;
-    /* background-color: white; */
+    background-color: rgb(21, 96, 96);
     border: 1px solid #ddd;
     border-radius: 10px;
     padding: 10px;
@@ -37,11 +41,22 @@ ul.profile-dropdown {
     z-index: 1000;
     list-style: none;
     padding: 0;
+    cursor: auto;
+
+    > li {
+        font-weight: bold;
+        margin-bottom: 5px; 
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        > button {
+            width: 100%;
+        }
+    }
 }
 
-li {
-    margin-bottom: 5px; 
-}
 
 .profile-button {
     display: flex;

@@ -115,11 +115,10 @@ export default function PostEditArtModal({ art, isEditing = false }) {
                 for (let i = 0; i < tagInputs.length; i++) {
                     const label = tagInputs[i];
                     if (label) {
-                        const formattedLabel = label.toLowerCase().replace(/\s+/g, '-');
                         if (currentTagIds[i]) {
-                            await dispatch(updateTagThunk(artId, currentTagIds[i], formattedLabel));
+                            await dispatch(updateTagThunk(artId, currentTagIds[i], label));
                         } else {
-                            await dispatch(createTagThunk(artId, formattedLabel));
+                            await dispatch(createTagThunk(artId, label));
                         }
                     } else {
                         if (currentTagIds[i]) {
@@ -137,8 +136,7 @@ export default function PostEditArtModal({ art, isEditing = false }) {
                 for (let i = 0; i < tagInputs.length; i++) {
                     const label = tagInputs[i];
                     if (label) {
-                        const formattedLabel = label.toLowerCase().replace(/\s+/g, '-');
-                        await dispatch(createTagThunk(artId, formattedLabel));
+                        await dispatch(createTagThunk(artId, label));
                     }
                 }
             }

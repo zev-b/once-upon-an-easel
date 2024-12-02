@@ -4,9 +4,9 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as sessionActions from '../../store/session';
 import { PiUserListLight } from "react-icons/pi";
-import OpenModalMenuItem from "./OpenModalItem";
 import PostEditArtModal from "../PostEditArtModal/PostEditArtModal";
 import './ProfileButton.css';
+import OpenModalButton from "../OpenModalButton/OpenModalButton";
 
 export default function ProfileButton({ user }) {
     const dispatch = useDispatch();
@@ -45,17 +45,19 @@ export default function ProfileButton({ user }) {
 
     return (
         <>
-        <button onClick={toggleMenu}>
+        <button onClick={toggleMenu} className="p-icon">
         <PiUserListLight />
         </button>
         <ul className={ulClassName} ref={ulRef}>
             <>
               <li>Hello, {user.username}</li>
-              <OpenModalMenuItem
-                itemText="Post to Gallery"
+              <li>
+              <OpenModalButton
+                buttonText="Post to Gallery"
                 onItemClick={closeMenu}
                 modalComponent={<PostEditArtModal />}
               />
+              </li>
               <li>
                 <button onClick={() => {
                         closeMenu()

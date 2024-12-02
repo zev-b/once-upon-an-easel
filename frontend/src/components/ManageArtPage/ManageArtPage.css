@@ -98,4 +98,11 @@
 /* .manage-art-container button:hover {
     background-color: #218838;
 } */
-  
+
+.annoying-button {
+
+}
+
+.annoying-button:hover {
+    filter: brightness(180%);
+}

@@ -1,11 +1,4 @@
-.error-border {
-    border: 2px solid red;
-}
 
-.error-message {
-    color: rgb(110, 18, 18);
-    font-size: 0.9rem;
-}
 
 input {
     padding: 8px;
