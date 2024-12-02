@@ -43,7 +43,7 @@ export default function ManageArtPage() {
 
                 <h3>{art.title}</h3>
                 <div className="art-tags">
-                {Object.values(tags).filter((tag) => art.tags.includes(tag.id)).map((tag) => (
+                {Object.values(tags).filter((tag) => (art.tags ?? []).includes(tag.id)).map((tag) => (
                 <div key={tag.id} >
                     {tag.name}
                 </div>

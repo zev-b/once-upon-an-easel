@@ -23,7 +23,7 @@ export default function GalleryHome() {
  
     return (
         <div className="art-list">
-            {Object.values(allArt).filter((art) => activeFilter ? art.tags.includes(activeFilter) : true).map((art) => (
+            {Object.values(allArt).filter((art) => activeFilter ? (art.tags ?? []).includes(activeFilter) : true).map((art) => (
                 <div 
                 key={art.id}
                 className="art-tile"
@@ -36,7 +36,7 @@ export default function GalleryHome() {
                         <span> Title: {art.title}</span>
                         <span>Artist: {art.user.firstName} {art.user.lastName}</span>
                              <div className="art-tags">
-                                 {Object.values(tags).filter((tag) => art.tags.includes(tag.id)).map((tag) => (
+                                 {Object.values(tags).filter((tag) => (art.tags ?? []).includes(tag.id)).map((tag) => (
                                     <div key={tag.id} >
                                         {tag.name}
                                     </div>

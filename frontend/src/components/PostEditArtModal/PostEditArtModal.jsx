@@ -2,7 +2,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { useEffect, useState } from "react";
-import { createArtThunk, updateArtThunk, createTagThunk, updateTagThunk } from "../../store/art";
+import { createArtThunk, updateArtThunk, createTagThunk, updateTagThunk, fetchTagsThunk } from "../../store/art";
 import './PostEditArtModal.css';
 
 export default function PostEditArtModal({ art, isEditing = false }) {
@@ -113,6 +113,7 @@ export default function PostEditArtModal({ art, isEditing = false }) {
                 artId = art.id; //#(for tags)
             } else {
                 const newArt = await dispatch(createArtThunk(user.id, form));
+                console.log(`NEW_ART ===>`, newArt);
                 artId = newArt.id; //#(for tags)
             }
 
@@ -130,9 +131,10 @@ export default function PostEditArtModal({ art, isEditing = false }) {
                     }
                 }
             }
+            dispatch(fetchTagsThunk);
             closeModal();
         } catch (res) {
-            // console.log(`RES =>`,res)
+            console.log(`RES =>`,res)
             const data = await res.json();
             if (data && data.errors) {
                 setErrors(data.errors);
@@ -145,21 +147,21 @@ export default function PostEditArtModal({ art, isEditing = false }) {
             setButtonDisabled(
                 title.length > 50 ||
                 description.length > 315 ||
-                Object.keys(errors).some((key) => errors[key]) ||
-                Object.keys(labelErrors).length > 0
+                Object.keys(errors).some((key) => errors[key])
+                // || Object.keys(labelErrors).length > 0
             )
         } else {
             setButtonDisabled(
                 !imageFile ||
                 title.length > 50 ||
                 description.length > 315 ||
-                Object.keys(errors).some((key) => errors[key]) || 
-                Object.keys(labelErrors).length > 0
+                Object.keys(errors).some((key) => errors[key])
+                // || Object.keys(labelErrors).length > 0
             );
         }
         // console.log(`= Btn disabld? =`, Object.keys(errors).some((key) => errors[key]));
         // console.log(`= isEditing? =`, isEditing, art)
-    }, [imageFile, title, description, errors, isEditing, labelErrors, art]);
+    }, [imageFile, title, description, errors, isEditing, labelErrors]);
 
     const uploadImage = async (e) => {
         const file = e.target.files[0];
@@ -244,7 +246,7 @@ export default function PostEditArtModal({ art, isEditing = false }) {
                     onChange={(e) => setLabel1(e.target.value)}
                     className={labelErrors.label1 ? "error-border" : ""}
                 />
-                    {labelErrors.label1 && <p className="error">{labelErrors.label1}</p>}
+                    {labelErrors.label1 && <p className="error-message">{labelErrors.label1}</p>}
                 <input 
                     type="text"
                     value={label2}
@@ -252,7 +254,7 @@ export default function PostEditArtModal({ art, isEditing = false }) {
                     onChange={(e) => setLabel2(e.target.value)}
                     className={labelErrors.label2 ? "error-border" : ""}
                 />
-                {labelErrors.label2 && <p className="error">{labelErrors.label2}</p>}
+                {labelErrors.label2 && <p className="error-message">{labelErrors.label2}</p>}
                 <input 
                     type="text"
                     value={label3}
@@ -260,7 +262,7 @@ export default function PostEditArtModal({ art, isEditing = false }) {
                     onChange={(e) => setLabel3(e.target.value)}
                     className={labelErrors.label3 ? "error-border" : ""}
                 />
-                {labelErrors.label3 && <p className="error">{labelErrors.label3}</p>}
+                {labelErrors.label3 && <p className="error-message">{labelErrors.label3}</p>}
 
             {!showUpload && (
                 <div>

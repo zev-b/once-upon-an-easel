@@ -152,11 +152,11 @@ export const createArtThunk = (userId, form) => async (dispatch) => {
   if (res.ok) {
     const artPiece = await res.json();
     dispatch(createArt(artPiece));
-
+    return artPiece;
   } else if (res.status < 500) {
-    const data = await res.json();
+    // const data = await res.json();
 
-    if (data.errors) return data
+    // if (data.errors) return data
 
     throw res;
   }
@@ -221,16 +221,18 @@ export const fetchTagsThunk = () => async (dispatch) => {
 export const createTagThunk = (artId, tagName) => async (dispatch) => {
   const res = await csrfFetch(`/api/art-pieces/${artId}/tags`, {
     method: 'POST',
-    body: JSON.stringify({ name: tagName }),
+    body: JSON.stringify({ tagName }),
   });
 
   if (res.ok) {
     const newTag = await res.json();
     dispatch(createTag(newTag));
     return newTag;
-  } else {
+  } else if (res.status < 500) {
     const error = await res.json();
     return error;
+  } else {
+    throw res;
   }
 }
 
@@ -245,9 +247,11 @@ export const updateTagThunk = (artId, tagId, newName) => async (dispatch) => {
     const updatedTag = await res.json();
     dispatch(updateTag(updatedTag));
     return updatedTag;
-  } else {
+  } else if (res.status < 500) {
     const error = await res.json();
     return error;
+  } else {
+    throw res;
   }
 }
 
