@@ -22,7 +22,7 @@ export default function LoginSignupForm() {
     e.preventDefault();
     const loginErrors = {};
     if (credential.length < 4) loginErrors.credential = "Credential must be 4 or more characters";
-    if (password.length < 6) loginErrors.password = "Password must be 6 or mre characters";
+    if (password.length < 6) loginErrors.password = "Password must be 6 or more characters";
   
     setErrors(loginErrors);
     if (Object.keys(loginErrors).length > 0) return
