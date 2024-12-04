@@ -35,10 +35,10 @@ export default function ArtDetailsPage() {
                 <img src={art.imageId} className="image-itself" alt="image of art" />
             </div>
             <div className="info-container">
-            <div className="artist-name">
+            <h3 className="artist-name">
                 Artist: {art.user.firstName} {art.user.lastName}
-            </div>
-            <div className="art-tags">
+            </h3>
+            <div className="art-tags-details-page">
             {Object.values(tags).filter((tag) => (art.tags ?? []).includes(tag.id)).map((tag) => (
                 <div key={tag.id} >
                     {tag.name}

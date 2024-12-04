@@ -20,7 +20,7 @@
   
 #modal-content {
     position: absolute;
-    background-color: rgb(117, 177, 123);
+    background-color: #7da894;
     max-height: 90vh;
     overflow-y: auto;
     max-width: 60vw;

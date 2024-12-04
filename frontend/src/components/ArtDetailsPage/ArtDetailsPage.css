@@ -36,6 +36,22 @@
     max-width: 600px;
 }
 
+.art-tags-details-page {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #ccc;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.art-tags-details-page div {
+    background: rgba(255, 255, 255, 0.2); 
+    padding: 4px 8px;
+    border-radius: 15px;
+}
+
 .artist-name,
 .description,
 .date-added {

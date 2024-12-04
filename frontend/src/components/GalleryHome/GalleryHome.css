@@ -1,5 +1,5 @@
 /* GalleryHome Styling*/
-.art-list {
+/* .art-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
     gap: 1rem;
@@ -11,7 +11,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* background-color: #f9f9f9; */
+    /* background-color: #f9f9f9; */ /*
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
@@ -45,5 +45,80 @@
     margin-top: 8px;
     font-size: 12px;
     color: #777;
-}
+} */
   
+
+/* Updated GalleryHome Styling */
+.art-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    gap: 1rem;
+    padding: 16px;
+    justify-content: center;
+}
+
+.art-tile {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.art-tile:hover {
+    transform: scale(1.03);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.art-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.art-tile:hover .art-image {
+    transform: scale(1.1); 
+}
+
+.art-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    padding: 12px;
+    text-align: left;
+    opacity: 0;
+    transform: translateY(100%);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.art-tile:hover .art-info {
+    opacity: 0.9;
+    transform: translateY(0);
+}
+
+.art-details-info span {
+    display: block;
+    margin: 4px 0;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.art-tags {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #ccc;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.art-tags div {
+    background: rgba(255, 255, 255, 0.2); 
+    padding: 4px 8px;
+    border-radius: 15px;
+}
