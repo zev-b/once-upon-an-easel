@@ -4,11 +4,12 @@ let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;  // define your schema in options object
 }
+options.tableName = 'ArtTags';
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('ArtTags', {
+    await queryInterface.createTable(options, {
       artId: {
         type: Sequelize.INTEGER,
         references: {
@@ -34,7 +35,6 @@ module.exports = {
     }, options);
   },
   async down(queryInterface, Sequelize) {
-    options.tableName = 'ArtTags';
     await queryInterface.dropTable(options);
   }
 };
