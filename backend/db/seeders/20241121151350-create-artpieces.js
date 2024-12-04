@@ -137,7 +137,7 @@ const seedData = [
   },
   {
     userId: 6,
-    imageId: 'https://once-upon-an-easel-bucket.s3.us-east-1.amazonaws.com/usher-art/yellowfieldsjpg',
+    imageId: 'https://once-upon-an-easel-bucket.s3.us-east-1.amazonaws.com/usher-art/yellowfields.jpg',
     title: 'Yellow Fields',
     description: 'Текст-рыба для веб-дизайна: лорем ипсум долор сит амет, consectetur adipiscing элит. Элиас интеллегам мел ид, при пертинах хонистас ут. Не про вирис сапиентем, вис номинави детрахит адиписцинг ут. Яуидам сенсибус вис ид, ин про убикве ирьяредем. Эос ут обликве веритус.',
     available: true
@@ -200,7 +200,7 @@ const seedData = [
   },
   {
     userId: 8,
-    imageId: 'https://once-upon-an-easel-bucket.s3.us-east-1.amazonaws.com/usher-art/vehiclejpg',
+    imageId: 'https://once-upon-an-easel-bucket.s3.us-east-1.amazonaws.com/usher-art/vehicle.jpg',
     title: 'Vehicle',
     description: 'Текст-рыба для веб-дизайна: лорем ипсум долор сит амет, consectetur adipiscing элит. Элиас интеллегам мел ид, при пертинах хонистас ут. Не про вирис сапиентем, вис номинави детрахит адиписцинг ут. Яуидам сенсибус вис ид, ин про убикве ирьяредем. Эос ут обликве веритус.',
     available: true
