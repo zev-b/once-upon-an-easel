@@ -39,7 +39,7 @@ router.get('/', async (req, res, next) => {
             whereTags = {
                 [Op.and]: [Sequelize.literal(`EXISTS (
                     SELECT 1 
-                    FROM "Tags" t
+                    FROM ${process.env.NODE_ENV === "production" ? `"${process.env.SCHEMA}".` : ""}"Tags" t
                     INNER JOIN "ArtTags" at 
                         ON at.tagId = t.id
                     WHERE 
