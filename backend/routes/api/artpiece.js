@@ -41,9 +41,9 @@ router.get('/', async (req, res, next) => {
                     SELECT 1 
                     FROM ${process.env.NODE_ENV === "production" ? `"${process.env.SCHEMA}".` : ""}"Tags" t
                     INNER JOIN ${process.env.NODE_ENV === "production" ? `"${process.env.SCHEMA}".` : ""}"ArtTags" at 
-                        ON at.tagId = t.id
+                        ON at."tagId" = t.id
                     WHERE 
-                        at.artId = "ArtPiece"."id"
+                        at."artId" = "ArtPiece"."id"
                         AND t.id IN (${tagIdArray.join(",")})
                     )`),
                 ]
