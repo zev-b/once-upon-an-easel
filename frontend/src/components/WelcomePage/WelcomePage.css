@@ -102,3 +102,29 @@
 .demo-login-button:hover {
   background-color: rgb(9, 46, 43);
 }
+
+@media (max-width: 850px) {
+  .form-container {
+    position: static; 
+    width: 90vw; 
+    margin: 0 auto;
+    margin-top: 10px;
+  }
+
+  .master-flex {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+  }
+
+  .form-container { 
+    align-self:baseline;
+  }
+
+  .handwritten-typewriter {
+    font-size: 3rem;
+  }
+  .handwritten-text {
+
+  }
+}

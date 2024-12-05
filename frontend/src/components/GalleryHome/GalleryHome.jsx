@@ -30,7 +30,7 @@ export default function GalleryHome() {
                 onClick={() => handleTileClick(art.id)}
                 title={art.title}
                 >
-                <img src={art.imageId}alt={`${art.title} -Image`} className="art-image" /> 
+                <img src={art.imageId} alt={`${art.title} -Image`} className="art-image" /> 
                 <div className="art-info">
                      <div className="art-details-info">
                         <span> Title: {art.title}</span>
