@@ -119,7 +119,7 @@ router.get('/', async (req, res, next) => {
 
 
 //# GET current user's art-pieces
-router.get('/current',restoreUser, requireAuth, async (req, res, next) => {
+router.get('/current', restoreUser, requireAuth, async (req, res, next) => {
     const currentUserId = req.user.id;
 
     try {
@@ -131,12 +131,20 @@ router.get('/current',restoreUser, requireAuth, async (req, res, next) => {
                     attributes: ["id", "name"],
                     through: { attributes: [] },
                 },
+                {
+                    model: User, 
+                    attributes: ["firstName", "lastName"],
+                },
             ],
         });
         
         const result = userArt.map((art) => ({
             id: art.id,
             userId: art.userId,
+            user: {
+                firstName: art.User.firstName,
+                lastName: art.User.lastName,
+            },
             imageId: art.imageId,
             title: art.title,
             description: art.description,
