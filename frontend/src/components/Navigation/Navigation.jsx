@@ -65,20 +65,21 @@ export default function Navigation() {
                 </li>
             )}
             </div>
-            <div>
-
-            </div>
-                <ul className="tags-list">
-                    { isHome && (<li>Filter by a tag:</li>)}
+            {/* <div>
+            </div> */}
+                <div className="filter-situation">
+                    { isHome && (<span>Filter by a tag:</span>)}
                     {isHome && activeFilter && (
                         <button onClick={clearFilter} className="clear-filter-btn">Clear Filter</button>
                     )}
-                    {isHome && (Object.values(tags)?.map((tag) => (
-                        <li key={tag.id} className="tag" onClick={(e) => handleTagClick(tag.id, e)}>
-                            {tag.name}
-                        </li>
-                    )))}
-                </ul>
+                    <ul className="tags-list">
+                        {isHome && (Object.values(tags)?.map((tag) => (
+                            <li key={tag.id} className="tag" onClick={(e) => handleTagClick(tag.id, e)}>
+                                {tag.name}
+                            </li>
+                        )))}
+                    </ul>
+                </div>
         </ul>
     )
 }
