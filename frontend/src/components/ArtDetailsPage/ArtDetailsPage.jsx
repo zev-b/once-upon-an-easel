@@ -29,6 +29,7 @@ export default function ArtDetailsPage() {
     }, [dispatch, artId]);
 
     return loaded ? (
+        art ? (
         <div className="art-details-page">
             <h2>{art.title}</h2>
             <div className="details-art-image-container">
@@ -53,6 +54,7 @@ export default function ArtDetailsPage() {
             </div>
             </div>
         </div>
+        ) : <h2>Error fetching Art</h2>
     ) : <p>Loading art...</p>
 
 }
