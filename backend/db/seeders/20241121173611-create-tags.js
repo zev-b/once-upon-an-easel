@@ -18,6 +18,9 @@ const seedData = [
   { name: 'tradition' },
   { name: 'watercolor' },
   { name: 'inspiration' },
+  { name: 'pastel' },
+  { name: 'floral' },
+
 ]
 
 /** @type {import('sequelize-cli').Migration} */
