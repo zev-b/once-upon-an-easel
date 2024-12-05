@@ -46,7 +46,7 @@
 .art-details {
     display: flex;
     flex-direction: column;
-    height: calc(100%- 200px);
+    height: calc(100% - 200px);
     padding: 10px;
     text-align: center;
     width: 100%;
