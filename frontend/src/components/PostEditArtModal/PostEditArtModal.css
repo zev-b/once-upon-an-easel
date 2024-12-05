@@ -40,3 +40,25 @@ img {
         color: white;
     }
 }
+
+@media (max-width: 940px) {
+    .edit-post-form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .inputs {
+        width: 50vw;
+    }
+
+    .image-and-button {
+    
+        & input[type="file"] {
+            width: 50vw;
+        }
+    }
+
+    img {
+        width: 50vw;
+    }
+}

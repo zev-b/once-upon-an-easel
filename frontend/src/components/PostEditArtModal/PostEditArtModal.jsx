@@ -56,36 +56,6 @@ export default function PostEditArtModal({ art, isEditing = false }) {
         setLabelErrors(errors);
         return Object.keys(errors).length === 0;
     };
-
-    // const handleLabels = async (e) => {
-    //     e.preventDefault();
-
-    //     if (!validateLabels()) return;
-
-    //     const tagInputs = [label1, label2, label3];
-    //     const currentTagIds = art?.tags || [];
-
-    //     try {
-    //         // dispatch POST/PUT thunks for each label
-    //         for (let i = 0; i < tagInputs.length; i++) {
-    //             const label = tagInputs[i];
-
-    //             if (label) {
-    //                 const formattedLabel = label.toLowerCase().replace(/\s+/g, '-');
-
-    //                 if (currentTagIds[i]) {
-    //                     await dispatch(updateTagThunk(art.id, currentTagIds[i], formattedLabel));
-    //                 } else {
-    //                     await dispatch(createTagThunk(art.id, formattedLabel));
-    //                 }
-    //             }
-    //         }
-    //         // closeModal();
-    //     } catch (error) {
-    //         console.error(error);
-    //         setErrors({ submit: "Failed to save tags. Please try again." });
-    //     }
-    // };
     
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -263,7 +233,7 @@ export default function PostEditArtModal({ art, isEditing = false }) {
             </div>
             <div className="image-and-button">
             {showUpload ? (
-                <label htmlFor='file-upload'> Select From Computer
+                <label htmlFor='file-upload'> Upload Image
                 <input
                   type='file'
                   id='file-upload'
