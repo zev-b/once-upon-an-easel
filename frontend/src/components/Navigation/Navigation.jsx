@@ -9,9 +9,9 @@ import { useEffect, useState } from "react";
 export default function Navigation() {
     const sessionUser = useSelector(state => state.session.user);
     const tags = useSelector(state => state.art.tags)
+    const activeFilter = useSelector(state => state.art.activeFilter);
     const dispatch = useDispatch();
     const location = useLocation();
-    const activeFilter = useSelector(state => state.art.activeFilter);
 
     const [isHome, setIsHome] = useState(false);
 
@@ -65,8 +65,6 @@ export default function Navigation() {
                 </li>
             )}
             </div>
-            {/* <div>
-            </div> */}
                 <div className="filter-situation">
                     { isHome && (<span>Filter by a tag:</span>)}
                     {isHome && activeFilter && (

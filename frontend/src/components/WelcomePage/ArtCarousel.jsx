@@ -23,11 +23,11 @@ export default function ArtCarousel() {
         }
     }, [allArt]);
 
-    const displayArt = Object.values(allArt)?.slice(0, 15) || [];
+    // const displayArt = Object.values(allArt)?.slice(0, 15) || [];
 
     return (
         <div className="carousel-container">
-            {displayArt.map((art, index) => (
+            {Object.values(allArt)?.slice(4, 19).map((art, index) => (
                 <img 
                     key={art.id}
                     src={art.imageId} 
