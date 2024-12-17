@@ -24,3 +24,12 @@ List of application features.
 
 ## [Database Schema](https://github.com/zev-b/once-upon-an-easel/wiki/Database-Schema)
 A visualization of the relationship between data.
+
+# Splash Page
+
+# Log In
+
+# Sign Up
+
+# Home Page
+
