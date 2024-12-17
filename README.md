@@ -18,3 +18,6 @@ Live Link: [Once-Upon-an-Easel](https://onceuponaneasel.zevb.dev/)
 ![Postgres](https://img.shields.io/badge/postgresql-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
 <img src="https://img.shields.io/badge/Amazon_AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white" alt="Amazon AWS" />
 </div>
+
+## [Feature List](https://github.com/zev-b/once-upon-an-easel/wiki/Feature-List)
+List of application features.
