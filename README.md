@@ -32,8 +32,10 @@ A visualization of the relationship between data.
 ![alt text](image-1.png)
 
 # Gallery Home Page
+![alt text](image-2.png)
 
 # Art Details Page
+![alt text](image-3.png)
 
 # Manage Art Page
 
