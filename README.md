@@ -21,3 +21,6 @@ Live Link: [Once-Upon-an-Easel](https://onceuponaneasel.zevb.dev/)
 
 ## [Feature List](https://github.com/zev-b/once-upon-an-easel/wiki/Feature-List)
 List of application features.
+
+## [Database Schema](https://github.com/zev-b/once-upon-an-easel/wiki/Database-Schema)
+A visualization of the relationship between data.
