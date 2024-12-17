@@ -31,5 +31,7 @@ A visualization of the relationship between data.
 
 # Sign Up
 
-# Home Page
+# Gallery Home Page
+
+# 
 
