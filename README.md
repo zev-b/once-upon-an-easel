@@ -25,13 +25,16 @@ List of application features.
 ## [Database Schema](https://github.com/zev-b/once-upon-an-easel/wiki/Database-Schema)
 A visualization of the relationship between data.
 
-# Splash Page
-
-# Log In
+# Splash Page / Log In
+![alt text](image.png)
 
 # Sign Up
-
+![alt text](image-1.png)
 # Gallery Home Page
 
-# 
+# Art Details Page
+
+# Manage Art Page
+
+# Upload Modal
 
