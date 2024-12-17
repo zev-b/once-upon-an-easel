@@ -30,6 +30,7 @@ A visualization of the relationship between data.
 
 # Sign Up
 ![alt text](image-1.png)
+
 # Gallery Home Page
 
 # Art Details Page
