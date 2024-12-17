@@ -38,6 +38,8 @@ A visualization of the relationship between data.
 ![alt text](image-3.png)
 
 # Manage Art Page
+![alt text](image-4.png)
 
-# Upload Modal
+# Upload / Edit Modal
+![alt text](image-5.png)
 
