@@ -27,20 +27,20 @@ List of application features.
 A visualization of the relationship between data.
 
 # Splash / Log In Page
-![alt text](image.png)
+![alt text](readme-assets/image.png)
 
 # Sign Up
-![alt text](image-1.png)
+![alt text](readme-assets/image-1.png)
 
 # Gallery Home Page
-![alt text](image-2.png)
+![alt text](readme-assets/image-2.png)
 
 # Art Details Page
-![alt text](image-3.png)
+![alt text](readme-assets/image-3.png)
 
 # Manage Art Page
-![alt text](image-4.png)
+![alt text](readme-assets/image-4.png)
 
 # Upload / Edit Modal
-![alt text](image-5.png)
+![alt text](readme-assets/image-5.png)
 
