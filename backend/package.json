@@ -15,7 +15,7 @@
         "sequelize-cli": "sequelize-cli",
         "start": "per-env",
         "start:development": "nodemon ./bin/www",
-        "start:production": "npm run build && npm run sequelize db:migrate && npm run sequelize db:seed:all && node ./bin/www",
+        "start:production": "node ./bin/www",
         "build": "node psql-setup-script.js",
         "data": "sqlite3 db/dev.db \".mode box\" \"select * from $TBL;\"",
         "d": "rm db/dev.db",
